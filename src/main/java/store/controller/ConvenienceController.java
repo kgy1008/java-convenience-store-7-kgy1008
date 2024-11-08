@@ -23,9 +23,10 @@ public class ConvenienceController {
         this.customer = new Customer();
     }
 
+
     public void start() {
-        displayProduct();
-        List<ShoppingProduct> shoppingProducts = tryToBuy();
+        retryTemplate(this::displayProduct);
+        List<ShoppingProduct> shoppingProducts = retryTemplate(this::tryToBuy);
     }
 
     private void displayProduct() {
@@ -36,13 +37,13 @@ public class ConvenienceController {
     }
 
     private List<ShoppingProduct> tryToBuy() {
-        String shoppingItems = inputView.inputShoppingItems();
+        String shoppingItems = retryTemplate(inputView::inputShoppingItems);
         List<ShoppingProduct> shoppingProducts = convenience.checkPurchaseItems(shoppingItems);
         customer.purchase(shoppingProducts);
         return shoppingProducts;
     }
 
-    private <T> T rerunTemplate(final Supplier<T> action) {
+    private <T> T retryTemplate(final Supplier<T> action) {
         while (true) {
             try {
                 return action.get();
@@ -52,7 +53,7 @@ public class ConvenienceController {
         }
     }
 
-    private void rerunTemplate(final Runnable action) {
+    private void retryTemplate(final Runnable action) {
         while (true) {
             try {
                 action.run();
