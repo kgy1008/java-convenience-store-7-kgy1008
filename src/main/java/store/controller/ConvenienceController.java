@@ -49,7 +49,7 @@ public class ConvenienceController {
 
     private void checkDiscountPolicy(List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
-            if (convenience.isExceedPromotionRemaingStock(shoppingProduct)) {
+            if (convenience.isGreaterThanPromotionRemaingStock(shoppingProduct)) {
                 int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
                 String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(),
                         itemsWithoutPromotionCount);

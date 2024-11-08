@@ -27,9 +27,10 @@ public class Convenience {
         return productFormatter.convertStringToItem(input, items);
     }
 
-    public boolean isExceedPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
+    public boolean isGreaterThanPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
         return items.checkRemainingPromotionStock(shoppingProduct.getName()) < shoppingProduct.getQuantity();
     }
+
 
     public int getItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
         int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
