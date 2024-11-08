@@ -1,6 +1,7 @@
 package store.controller;
 
 import static store.domain.user.UserResponse.NO;
+import static store.domain.user.UserResponse.YES;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,7 +26,6 @@ public class ConvenienceController {
         this.convenience = new Convenience();
         this.customer = new Customer();
     }
-
 
     public void start() {
         retryTemplate(this::displayProduct);
@@ -56,6 +56,14 @@ public class ConvenienceController {
                 UserResponse userResponse = UserResponse.from(answer);
                 if (userResponse == NO) {
                     customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
+                }
+            }
+
+            if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
+                String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
+                UserResponse userResponse = UserResponse.from(answer);
+                if (userResponse == YES) {
+                    customer.addCart(shoppingProduct);
                 }
             }
         }

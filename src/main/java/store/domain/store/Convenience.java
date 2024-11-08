@@ -8,6 +8,8 @@ import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
 
 public class Convenience {
+
+    private static final int EXACT_MATCH = 0;
     private final StoreInitializer initializer;
     private final Promotions promotions;
     private final Items items;
@@ -31,6 +33,18 @@ public class Convenience {
         return items.checkRemainingPromotionStock(shoppingProduct.getName()) < shoppingProduct.getQuantity();
     }
 
+    public boolean canReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
+        return isLessThanPromotionRemaingStock(shoppingProduct) && isLessThanPromotionStandard(shoppingProduct);
+    }
+
+    private boolean isLessThanPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
+        return items.checkRemainingPromotionStock(shoppingProduct.getName()) > shoppingProduct.getQuantity();
+    }
+
+    private boolean isLessThanPromotionStandard(final ShoppingProduct shoppingProduct) {
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName());
+        return shoppingProduct.getQuantity() % promotionGroupSize != EXACT_MATCH;
+    }
 
     public int getItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
         int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());

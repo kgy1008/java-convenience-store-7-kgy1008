@@ -1,19 +1,26 @@
 package store.domain.user;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ShoppingProduct {
 
     private final String name;
+    private final LocalDate purchaseDate;
     private int quantity;
 
     public ShoppingProduct(final String name, final int quantity) {
         this.name = name;
         this.quantity = quantity;
+        this.purchaseDate = LocalDate.now();
     }
 
     void decreaseQuantity(int count) {
-        this.quantity = this.quantity - count;
+        this.quantity -= count;
+    }
+
+    public void increaseQuantity(int count) {
+        this.quantity += count;
     }
 
     public String getName() {

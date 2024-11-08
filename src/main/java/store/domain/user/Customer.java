@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Customer {
 
+    private static final int FREE_BENEFIT = 1;
     private final List<ShoppingProduct> cart;
 
     public Customer() {
@@ -17,5 +18,9 @@ public class Customer {
 
     public void removeFromCart(final ShoppingProduct shoppingProduct, final int count) {
         shoppingProduct.decreaseQuantity(count);
+    }
+
+    public void addCart(final ShoppingProduct shoppingProduct) {
+        shoppingProduct.increaseQuantity(FREE_BENEFIT);
     }
 }
