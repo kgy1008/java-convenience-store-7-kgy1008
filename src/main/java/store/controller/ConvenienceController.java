@@ -66,8 +66,10 @@ public class ConvenienceController {
 
     private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
         int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
-        String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount);
-        UserResponse userResponse = UserResponse.from(answer);
+        UserResponse userResponse = retryTemplate(() -> {
+            String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount);
+            return UserResponse.from(answer);
+        });
 
         if (userResponse == UserResponse.NO) {
             customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
@@ -75,8 +77,10 @@ public class ConvenienceController {
     }
 
     private void handleAdditionalBenefit(final ShoppingProduct shoppingProduct) {
-        String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
-        UserResponse userResponse = UserResponse.from(answer);
+        UserResponse userResponse = retryTemplate(() -> {
+            String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
+            return UserResponse.from(answer);
+        });
 
         if (userResponse == UserResponse.YES) {
             customer.addCart(shoppingProduct);
