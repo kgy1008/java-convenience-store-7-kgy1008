@@ -1,6 +1,7 @@
 package store.controller;
 
 import java.util.List;
+import java.util.function.Supplier;
 import store.domain.store.Convenience;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
@@ -24,7 +25,7 @@ public class ConvenienceController {
 
     public void start() {
         displayProduct();
-        tryToBuy();
+        List<ShoppingProduct> shoppingProducts = tryToBuy();
     }
 
     private void displayProduct() {
@@ -34,9 +35,31 @@ public class ConvenienceController {
         outputView.printProducts(itemStatus);
     }
 
-    private void tryToBuy() {
+    private List<ShoppingProduct> tryToBuy() {
         String shoppingItems = inputView.inputShoppingItems();
         List<ShoppingProduct> shoppingProducts = convenience.checkPurchaseItems(shoppingItems);
         customer.purchase(shoppingProducts);
+        return shoppingProducts;
+    }
+
+    private <T> T rerunTemplate(final Supplier<T> action) {
+        while (true) {
+            try {
+                return action.get();
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    private void rerunTemplate(final Runnable action) {
+        while (true) {
+            try {
+                action.run();
+                break;
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 }

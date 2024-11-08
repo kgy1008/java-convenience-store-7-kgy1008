@@ -29,4 +29,8 @@ public class OutputView {
         }
         return quantity + QUANTITY_UNIT;
     }
+
+    public void printErrorMessage(final String message) {
+        System.out.println(message);
+    }
 }
