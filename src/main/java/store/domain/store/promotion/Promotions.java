@@ -1,6 +1,6 @@
 package store.domain.store.promotion;
 
-import static store.common.ErrorMessage.NOT_FOUND;
+import static store.common.ErrorMessage.INVALID_INPUT;
 
 import java.util.Set;
 import store.common.exception.AppException;
@@ -18,9 +18,8 @@ public class Promotions {
                 .noneMatch(promotion -> promotion.isEqual(name));
     }
 
-
     public Promotion findPromotionByName(final String name) {
         return promotions.stream().filter(promotion -> promotion.isEqual(name)).findFirst()
-                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new AppException(INVALID_INPUT.getMessage()));
     }
 }
