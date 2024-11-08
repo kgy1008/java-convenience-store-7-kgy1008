@@ -1,9 +1,9 @@
-package store.domain.promotion;
+package store.domain.store.promotion;
 
 public enum PromotionType {
 
-    ONE_PLUS_ONE(1,1),
-    TWO_PLUS_ONE(2,1);
+    ONE_PLUS_ONE(1, 1),
+    TWO_PLUS_ONE(2, 1);
 
     private final int buyCount;
     private final int freeToGet;

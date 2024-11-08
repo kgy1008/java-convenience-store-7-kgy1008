@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import store.common.exception.FileReadException;
-import store.domain.promotion.Promotion;
-import store.domain.promotion.PromotionType;
-import store.domain.promotion.Promotions;
+import store.domain.store.promotion.Promotion;
+import store.domain.store.promotion.PromotionType;
+import store.domain.store.promotion.Promotions;
 
 public class PromotionFileReader {
 
