@@ -21,6 +21,11 @@ public class Promotion implements DiscountPolicy {
     }
 
     @Override
+    public int getPromotionBundleSize() {
+        return PromotionType.getPromotionBundleSize(promotionType);
+    }
+
+    @Override
     public String getPolicyName() {
         return name;
     }

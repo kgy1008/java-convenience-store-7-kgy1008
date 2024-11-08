@@ -5,13 +5,17 @@ import java.util.List;
 
 public class Customer {
 
-    private final List<ShoppingProduct> shoppingProducts;
+    private final List<ShoppingProduct> cart;
 
     public Customer() {
-        this.shoppingProducts = new ArrayList<>();
+        this.cart = new ArrayList<>();
     }
 
     public void purchase(List<ShoppingProduct> shoppingProducts) {
-        this.shoppingProducts.addAll(shoppingProducts);
+        this.cart.addAll(shoppingProducts);
+    }
+
+    public void removeFromCart(final ShoppingProduct shoppingProduct, final int count) {
+        shoppingProduct.decreaseQuantity(count);
     }
 }

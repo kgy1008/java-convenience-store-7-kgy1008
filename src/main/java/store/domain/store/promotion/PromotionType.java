@@ -19,4 +19,8 @@ public enum PromotionType {
         }
         return ONE_PLUS_ONE;
     }
+
+    static int getPromotionBundleSize(final PromotionType promotionType) {
+        return promotionType.buyCount + promotionType.freeToGet;
+    }
 }

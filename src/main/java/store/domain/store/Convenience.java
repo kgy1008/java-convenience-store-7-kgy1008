@@ -26,4 +26,16 @@ public class Convenience {
         ProductFormatter productFormatter = new ProductFormatter();
         return productFormatter.convertStringToItem(input, items);
     }
+
+    public boolean isExceedPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
+        return items.checkRemainingPromotionStock(shoppingProduct.getName()) < shoppingProduct.getQuantity();
+    }
+
+    public int getItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
+        int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName());
+        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
+        int inputQuantity = shoppingProduct.getQuantity();
+        return inputQuantity - (fullPromotionGroupCount * promotionGroupSize);
+    }
 }

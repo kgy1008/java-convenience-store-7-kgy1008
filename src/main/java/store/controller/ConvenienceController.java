@@ -1,11 +1,14 @@
 package store.controller;
 
+import static store.domain.user.UserResponse.NO;
+
 import java.util.List;
 import java.util.function.Supplier;
 import store.domain.store.Convenience;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
 import store.domain.user.ShoppingProduct;
+import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
 import store.io.view.InputView;
 import store.io.view.OutputView;
@@ -27,6 +30,7 @@ public class ConvenienceController {
     public void start() {
         retryTemplate(this::displayProduct);
         List<ShoppingProduct> shoppingProducts = retryTemplate(this::tryToBuy);
+        checkDiscountPolicy(shoppingProducts);
     }
 
     private void displayProduct() {
@@ -41,6 +45,20 @@ public class ConvenienceController {
         List<ShoppingProduct> shoppingProducts = convenience.checkPurchaseItems(shoppingItems);
         customer.purchase(shoppingProducts);
         return shoppingProducts;
+    }
+
+    private void checkDiscountPolicy(List<ShoppingProduct> shoppingProducts) {
+        for (ShoppingProduct shoppingProduct : shoppingProducts) {
+            if (convenience.isExceedPromotionRemaingStock(shoppingProduct)) {
+                int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
+                String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(),
+                        itemsWithoutPromotionCount);
+                UserResponse userResponse = UserResponse.from(answer);
+                if (userResponse == NO) {
+                    customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
+                }
+            }
+        }
     }
 
     private <T> T retryTemplate(final Supplier<T> action) {

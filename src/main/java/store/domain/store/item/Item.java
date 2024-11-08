@@ -1,6 +1,7 @@
 package store.domain.store.item;
 
 import store.domain.store.promotion.DiscountPolicy;
+import store.domain.store.promotion.Promotion;
 
 public class Item {
     private final String name;
@@ -19,6 +20,14 @@ public class Item {
         return this.name.equals(name);
     }
 
+    boolean findPromotionItemByName(final String name) {
+        return this.name.equals(name) && isPromotionItem();
+    }
+
+    private boolean isPromotionItem() {
+        return this.discountPolicy instanceof Promotion;
+    }
+
     public String getName() {
         return name;
     }
@@ -33,5 +42,9 @@ public class Item {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public int getPromotionBundleSize() {
+        return discountPolicy.getPromotionBundleSize();
     }
 }

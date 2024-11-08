@@ -18,8 +18,7 @@ public class OutputView {
         System.out.println(PRODUCT_STATUS_MESSAGE + NEW_LINE);
         itemStatus.getItemDetails().forEach(itemDetail ->
                 System.out.printf("- %s %d원 %s %s%s", itemDetail.name(), itemDetail.price(),
-                        formatQuantity(itemDetail.quantity()), itemDetail.promotion(), NEW_LINE
-                )
+                        formatQuantity(itemDetail.quantity()), itemDetail.promotion(), NEW_LINE)
         );
     }
 
