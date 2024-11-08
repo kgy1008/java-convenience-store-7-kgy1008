@@ -1,8 +1,8 @@
-package store.domain.promotion;
+package store.domain.store.promotion;
 
 import java.time.LocalDate;
 
-public class Promotion {
+public class Promotion implements DiscountPolicy {
 
     private final String name;
     private final PromotionType promotionType;
@@ -14,5 +14,14 @@ public class Promotion {
         this.promotionType = promotionType;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public boolean isEqual(final String name) {
+        return this.name.equals(name);
+    }
+
+    @Override
+    public String getPolicyName() {
+        return name;
     }
 }
