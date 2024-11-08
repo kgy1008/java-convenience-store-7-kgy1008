@@ -4,6 +4,8 @@ import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
+import store.domain.store.util.ProductFormatter;
+import store.domain.user.ShoppingProduct;
 
 public class Convenience {
     private final StoreInitializer initializer;
@@ -18,5 +20,10 @@ public class Convenience {
 
     public List<Item> getItems() {
         return items.getItems();
+    }
+
+    public List<ShoppingProduct> checkPurchaseItems(final String input) {
+        ProductFormatter productFormatter = new ProductFormatter();
+        return productFormatter.convertStringToItem(input, items);
     }
 }

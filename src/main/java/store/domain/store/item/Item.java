@@ -15,6 +15,10 @@ public class Item {
         this.discountPolicy = discountPolicy;
     }
 
+    boolean isEqual(final String name) {
+        return this.name.equals(name);
+    }
+
     public String getName() {
         return name;
     }

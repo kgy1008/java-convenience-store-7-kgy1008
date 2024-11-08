@@ -12,9 +12,10 @@ public class InputView {
     private static final String PREFIX = "[";
     private static final String SUFFIX = "]";
     private static final String DETAIL_DELIMITER = "-";
+    private static final String NEW_LINE = System.lineSeparator();
 
     public String inputShoppingItems() {
-        System.out.println(PURCHASE_MESSAGE);
+        System.out.println(NEW_LINE + PURCHASE_MESSAGE);
         String input = Console.readLine();
         validate(input);
         return input;
