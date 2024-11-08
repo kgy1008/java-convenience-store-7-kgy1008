@@ -1,8 +1,5 @@
 package store.controller;
 
-import static store.domain.user.UserResponse.NO;
-import static store.domain.user.UserResponse.YES;
-
 import java.util.List;
 import java.util.function.Supplier;
 import store.domain.store.Convenience;
@@ -47,25 +44,42 @@ public class ConvenienceController {
         return shoppingProducts;
     }
 
-    private void checkDiscountPolicy(List<ShoppingProduct> shoppingProducts) {
+    private void checkDiscountPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
-            if (convenience.isGreaterThanPromotionRemaingStock(shoppingProduct)) {
-                int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
-                String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(),
-                        itemsWithoutPromotionCount);
-                UserResponse userResponse = UserResponse.from(answer);
-                if (userResponse == NO) {
-                    customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
-                }
+            if (isPromotionStockExceeded(shoppingProduct)) {
+                handlePromotionStockWarning(shoppingProduct);
             }
 
-            if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
-                String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
-                UserResponse userResponse = UserResponse.from(answer);
-                if (userResponse == YES) {
-                    customer.addCart(shoppingProduct);
-                }
+            if (isReceiveAdditionalBenefit(shoppingProduct)) {
+                handleAdditionalBenefit(shoppingProduct);
             }
+        }
+    }
+
+    private boolean isPromotionStockExceeded(final ShoppingProduct shoppingProduct) {
+        return convenience.isGreaterThanPromotionRemaingStock(shoppingProduct);
+    }
+
+    private boolean isReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
+        return convenience.canReceiveAdditionalBenefit(shoppingProduct);
+    }
+
+    private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
+        int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
+        String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount);
+        UserResponse userResponse = UserResponse.from(answer);
+
+        if (userResponse == UserResponse.NO) {
+            customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
+        }
+    }
+
+    private void handleAdditionalBenefit(final ShoppingProduct shoppingProduct) {
+        String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
+        UserResponse userResponse = UserResponse.from(answer);
+
+        if (userResponse == UserResponse.YES) {
+            customer.addCart(shoppingProduct);
         }
     }
 
