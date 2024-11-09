@@ -7,6 +7,7 @@ import store.domain.store.promotion.Promotions;
 import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
 import store.dto.Gift;
+import store.dto.Receipt;
 
 public class Convenience {
 
@@ -31,7 +32,7 @@ public class Convenience {
     }
 
     public boolean canReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
-        return isLessThanPromotionRemaingStock(shoppingProduct) && isLessThanPromotionStandard(shoppingProduct);
+        return isLessThanPromotionRemainingStock(shoppingProduct) && isLessThanPromotionStandard(shoppingProduct);
     }
 
     public int calculateItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
@@ -40,16 +41,17 @@ public class Convenience {
         return inputQuantity - promotionItemsAvailableSize;
     }
 
-    public void calculatePrice(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
+    public Receipt generateReceipt(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
         List<Gift> gifts = getGifts(shoppingProducts);
         Calculator calculator = new Calculator(shoppingProducts, gifts);
-        calculator.calculatePrice(hasMembershipBenefit);
+        return calculator.calculatePrice(hasMembershipBenefit);
     }
 
     private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
         return shoppingProducts.stream()
                 .filter(product -> items.isExistPromotionProduct(product.getName()))
-                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product), product.getPrice()))
+                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product), product.getPrice(),
+                        items.getPromotionBundleSize(product.getName(), promotions)))
                 .toList();
     }
 
@@ -78,7 +80,7 @@ public class Convenience {
         return fullPromotionGroupCount * promotionGroupSize;
     }
 
-    private boolean isLessThanPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
+    private boolean isLessThanPromotionRemainingStock(final ShoppingProduct shoppingProduct) {
         return items.checkRemainingPromotionStock(shoppingProduct.getName()) > shoppingProduct.getQuantity();
     }
 
