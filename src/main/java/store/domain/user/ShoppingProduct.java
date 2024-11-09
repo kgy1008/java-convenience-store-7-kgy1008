@@ -12,14 +12,6 @@ public class ShoppingProduct {
         this.quantity = quantity;
     }
 
-    void decreaseQuantity(int count) {
-        this.quantity -= count;
-    }
-
-    void increaseQuantity(int count) {
-        this.quantity += count;
-    }
-
     public String getName() {
         return name;
     }

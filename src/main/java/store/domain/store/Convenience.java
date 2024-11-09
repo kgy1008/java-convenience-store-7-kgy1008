@@ -1,15 +1,15 @@
 package store.domain.store;
 
 import java.util.List;
-import store.domain.store.item.Item;
 import store.domain.store.item.Items;
+import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
 import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
+import store.domain.user.ShoppingProducts;
 
 public class Convenience {
 
-    private static final int EXACT_MATCH = 0;
     private final Initializer initializer;
     private final Promotions promotions;
     private final Items items;
@@ -20,30 +20,50 @@ public class Convenience {
         this.items = initializer.initItems();
     }
 
-    public List<ShoppingProduct> getShoppingItemsFromUser(final String input) {
+    public ShoppingProducts getShoppingItemsFromUser(final String input) {
         ProductFormatter productFormatter = new ProductFormatter();
-        return productFormatter.convertStringToItem(input, items);
+        List<ShoppingProduct> products = productFormatter.convertStringToItem(input, items);
+        return new ShoppingProducts(products);
     }
-    /*
 
+    boolean isPromotionApplicableToday(final ShoppingProduct shoppingProduct) {
+        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
+            String promotionName = items.getPromotionNameOfItem(shoppingProduct.getName());
+            Promotion promotion = promotions.findPromotionByName(promotionName);
+            return promotion.isBetweenPromotionDuration();
+        }
+        return false;
+    }
+     /*
     public boolean isPromotionNotApplicableToAllItems(final ShoppingProduct shoppingProduct) {
-        return calculateMaxCountOfPromotionItemsAvailable(shoppingProduct) < shoppingProduct.getQuantity();
+        return calculateMaxCountOfPromotionApplied(shoppingProduct) < shoppingProduct.getQuantity();
     }
 
     public boolean canReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
         return isLessThanPromotionRemainingStock(shoppingProduct) && isLessThanPromotionStandard(shoppingProduct);
     }
 
-    public int calculateItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
-        int inputQuantity = shoppingProduct.getQuantity();
-        int promotionItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
-        return inputQuantity - promotionItemsAvailableSize;
+    private int calculateMaxCountOfPromotionApplied(final ShoppingProduct shoppingProduct) {
+        int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
+        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
+        return fullPromotionGroupCount * promotionGroupSize;
     }
+
 
     public Receipt generateReceipt(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
         List<Gift> gifts = getGifts(shoppingProducts);
         Calculator calculator = new Calculator(shoppingProducts, gifts);
         return calculator.calculatePrice(hasMembershipBenefit);
+    }
+
+
+
+
+    public int calculateItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
+        int inputQuantity = shoppingProduct.getQuantity();
+        int promotionItemsAvailableSize = calculateMaxCountOfPromotionAvailable(shoppingProduct);
+        return inputQuantity - promotionItemsAvailableSize;
     }
 
     private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
@@ -64,29 +84,15 @@ public class Convenience {
         return Math.min(maxStockBasedPromotionApplied, inputPromotionAppliedCount);
     }
 
-    public boolean isPromotionProduct(final ShoppingProduct shoppingProduct) {
-        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
-            String promotionName = items.findPromotionNameOfItem(shoppingProduct.getName());
-            Promotion promotion = promotions.findPromotionByName(promotionName);
-            return promotion.isBetweenPromotionDuration(shoppingProduct.getDate());
-        }
-        return false;
-    }
-
 
      */
 
-    public List<Item> getItems() {
-        return items.getItems();
+    public Items getItems() {
+        return items;
     }
 
     /*
-    private int calculateMaxCountOfPromotionItemsAvailable(final ShoppingProduct shoppingProduct) {
-        int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
-        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
-        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
-        return fullPromotionGroupCount * promotionGroupSize;
-    }
+
 
     private boolean isLessThanPromotionRemainingStock(final ShoppingProduct shoppingProduct) {
         return items.checkRemainingPromotionStock(shoppingProduct.getName()) > shoppingProduct.getQuantity();

@@ -40,4 +40,9 @@ public class BasicItem implements Item {
     public boolean isEqual(final String name) {
         return this.name.equals(name);
     }
+
+    @Override
+    public boolean isPromotionProduct() {
+        return false;
+    }
 }

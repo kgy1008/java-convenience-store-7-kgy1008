@@ -11,4 +11,7 @@ public interface Item {
     int getQuantity();
 
     boolean isEqual(String name);
+
+    boolean isPromotionProduct();
+
 }
