@@ -1,6 +1,7 @@
 package store.domain.user;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Customer {
@@ -10,12 +11,12 @@ public class Customer {
     private final MemberShipType memberShipType;
 
     public Customer() {
-        this.cart = new ArrayList<>();
+        cart = new ArrayList<>();
         memberShipType = setMemberShipType();
     }
 
     public void purchase(List<ShoppingProduct> shoppingProducts) {
-        this.cart.addAll(shoppingProducts);
+        cart.addAll(shoppingProducts);
     }
 
     public void removeFromCart(final ShoppingProduct shoppingProduct, final int count) {
@@ -28,6 +29,10 @@ public class Customer {
 
     public boolean hasMembership() {
         return this.memberShipType == MemberShipType.MEMBERSHIP_MEMBER;
+    }
+
+    public List<ShoppingProduct> getCart() {
+        return Collections.unmodifiableList(cart);
     }
 
     private MemberShipType setMemberShipType() {
