@@ -32,7 +32,7 @@ public class ProductFormatter {
     }
 
     private ShoppingProduct parseData(final String input, final Items items) {
-        String[] data = input.replace(PREFIX, "").replace(SUFFIX, "").split(DETAIL_DELIMITER);
+        String[] data = input.replace(PREFIX, "").replace(SUFFIX, "").trim().split(DETAIL_DELIMITER);
         String name = data[0];
         int quantity = convertStringToInt(data[1]);
         validate(name, quantity, items);
