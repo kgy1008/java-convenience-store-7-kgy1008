@@ -2,7 +2,7 @@ package store.domain.store.item;
 
 public class Item {
 
-    private final String NO_PROMOTION = "";
+    private static final String NO_PROMOTION = "";
     private final String name;
     private final int price;
     private final String promotionName;
