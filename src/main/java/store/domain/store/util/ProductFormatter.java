@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import store.common.exception.AppException;
+import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.user.ShoppingProduct;
 
@@ -20,7 +21,7 @@ public class ProductFormatter {
     private static final String PREFIX = "[";
     private static final String SUFFIX = "]";
     private static final String DETAIL_DELIMITER = "-";
-    private static final int MINIMUN_PURCHASE_QUANTITY = 1;
+    private static final int MINIMUM_PURCHASE_QUANTITY = 1;
 
     public List<ShoppingProduct> convertStringToItem(final String input, final Items items) {
         List<ShoppingProduct> shoppingProducts = Arrays.stream(input.split(DELIMITER))
@@ -35,7 +36,8 @@ public class ProductFormatter {
         String name = data[0];
         int quantity = convertStringToInt(data[1]);
         validate(name, quantity, items);
-        return new ShoppingProduct(name, quantity);
+        int price = findPrice(items, name);
+        return new ShoppingProduct(name, price, quantity);
     }
 
     private int convertStringToInt(final String input) {
@@ -58,12 +60,17 @@ public class ProductFormatter {
     }
 
     private void validateQuantity(final String name, final int quantity, final Items items) {
-        if (quantity < MINIMUN_PURCHASE_QUANTITY) {
+        if (quantity < MINIMUM_PURCHASE_QUANTITY) {
             throw new AppException(INVALID_INPUT.getMessage());
         }
         if (isExceedQuantity(name, quantity, items)) {
             throw new AppException(EXCEED_QUANTITY.getMessage());
         }
+    }
+
+    private int findPrice(final Items items, final String name) {
+        Item item = items.findItemByName(name);
+        return item.getPrice();
     }
 
     private boolean isExceedQuantity(final String name, final int quantity, final Items items) {

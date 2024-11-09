@@ -4,7 +4,6 @@ import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
-import store.domain.store.util.CartItemFormatter;
 import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
 import store.dto.Gift;
@@ -42,15 +41,9 @@ public class Convenience {
     }
 
     public void calculatePrice(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
-        List<CalculableItem> calculableItems = formatItemsForCalculation(shoppingProducts);
         List<Gift> gifts = getGifts(shoppingProducts);
-        Calculator calculator = new Calculator(calculableItems, gifts);
-        calculator.calculatePrice(items, hasMembershipBenefit);
-    }
-
-    private List<CalculableItem> formatItemsForCalculation(final List<ShoppingProduct> shoppingProducts) {
-        CartItemFormatter cartItemFormatter = new CartItemFormatter();
-        return cartItemFormatter.convertToCalculableItem(shoppingProducts, items);
+        Calculator calculator = new Calculator(shoppingProducts, gifts);
+        calculator.calculatePrice(hasMembershipBenefit);
     }
 
     private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
