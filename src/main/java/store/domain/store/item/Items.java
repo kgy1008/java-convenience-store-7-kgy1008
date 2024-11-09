@@ -1,7 +1,12 @@
 package store.domain.store.item;
 
+import static store.common.ErrorMessage.NOT_FOUND;
+
 import java.util.Collections;
 import java.util.List;
+import store.common.exception.AppException;
+import store.domain.store.promotion.Promotion;
+import store.domain.store.promotion.Promotions;
 
 public class Items {
 
@@ -27,7 +32,16 @@ public class Items {
         return Collections.unmodifiableList(items);
     }
 
-    /*
+    public String getPromotionNameOfItem(final String name) {
+        Item item = findItemByName(name);
+        return item.getPromotionName();
+    }
+
+    public boolean isExistPromotionProduct(final String name) {
+        Item item = findItemByName(name);
+        return item.isPromotionProduct();
+    }
+
     public Item findItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.isEqual(name))
@@ -36,39 +50,23 @@ public class Items {
     }
 
     public int checkRemainingPromotionStock(final String name) {
-        return findPromotionItemByName(name)
-                .map(Item::getQuantity)
-                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
+        Item promotionItem = findItemByName(name);
+        return promotionItem.getQuantity();
     }
 
     public int getPromotionBundleSize(final String name, final Promotions promotions) {
-        return findPromotionItemByName(name)
-                .map(item -> findPromotionByName(item.getPromotionName(), promotions))
-                .map(Promotion::getPromotionBundleSize)
-                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
+        Item promotionItem = findItemByName(name);
+        Promotion promotion = promotions.findPromotionByName(promotionItem.getPromotionName());
+        return promotion.getPromotionBundleSize();
     }
 
-    public boolean isExistPromotionProduct(final String name) {
-        Optional<Item> item = findPromotionItemByName(name);
-        return item.isPresent();
-    }
+    /*
 
     public String findPromotionNameOfItem(final String name) {
         Item item = findPromotionItemByName(name)
                 .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
         return item.getPromotionName();
     }
-
-
-
-    private Optional<Item> findPromotionItemByName(final String name) {
-        return items.stream()
-                .filter(item -> item.findPromotionItemByName(name))
-                .findFirst();
-    }
-
-    private Promotion findPromotionByName(final String name, final Promotions promotions) {
-        return promotions.findPromotionByName(name);
-    }
+\
     */
 }

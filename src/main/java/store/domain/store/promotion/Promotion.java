@@ -24,7 +24,8 @@ public class Promotion {
         return PromotionType.getPromotionBundleSize(promotionType);
     }
 
-    public boolean isBetweenPromotionDuration(final LocalDate present) {
+    public boolean isBetweenPromotionDuration() {
+        LocalDate present = LocalDate.now();
         return (present.isEqual(startDate) || present.isAfter(startDate)) &&
                 (present.isEqual(endDate) || present.isBefore(endDate));
     }
