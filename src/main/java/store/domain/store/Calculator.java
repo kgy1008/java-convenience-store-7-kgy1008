@@ -24,7 +24,9 @@ public class Calculator {
         int promotionDiscountPrice = calculatePromotionDiscountPrice();
         int memberShipDiscountPrice = calculateMemberShipDiscountPrice(hasMembershipBenefit, totalPrice);
         int payment = totalPrice - (promotionDiscountPrice + memberShipDiscountPrice);
-        return Receipt.generate(cart, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment);
+        int totalCount = calculateTotalCount();
+        return Receipt.generate(cart, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment,
+                totalCount);
     }
 
     private int calculateTotalPrice() {
@@ -37,9 +39,7 @@ public class Calculator {
 
     private int calculatePromotionDiscountPrice() {
         return gifts.stream()
-                .mapToInt(gift ->
-                        gift.quantity() * gift.price()
-                )
+                .mapToInt(gift -> gift.quantity() * gift.price())
                 .sum();
     }
 
@@ -57,5 +57,11 @@ public class Calculator {
                 .mapToInt(gift -> gift.quantity() * gift.price() * gift.promotionGroupSize())
                 .sum();
         return totalPrice - noMemberShipDiscountTargetPrice;
+    }
+
+    private int calculateTotalCount() {
+        return cart.stream()
+                .mapToInt(ShoppingProduct::getQuantity)
+                .sum();
     }
 }

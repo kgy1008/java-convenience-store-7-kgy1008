@@ -9,7 +9,8 @@ public record Receipt(
         int totalPrice,
         int promotionDiscountPrice,
         int memberShipDiscountPrice,
-        int payment
+        int payment,
+        int totalCount
 ) {
     public static Receipt generate(
             final List<ShoppingProduct> purchasedProducts,
@@ -17,8 +18,9 @@ public record Receipt(
             final int totalPrice,
             final int promotionDiscountPrice,
             final int memberShipDiscountPrice,
-            final int payment) {
+            final int payment,
+            final int totalCount) {
         return new Receipt(purchasedProducts, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice,
-                payment);
+                payment, totalCount);
     }
 }
