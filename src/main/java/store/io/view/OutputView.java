@@ -1,24 +1,7 @@
 package store.io.view;
 
-import static store.io.view.ReceiptFormat.DIVIDING_LINE;
-import static store.io.view.ReceiptFormat.ITEM_NAME;
-import static store.io.view.ReceiptFormat.ITEM_PRICE;
-import static store.io.view.ReceiptFormat.ITEM_QUANTITY;
-import static store.io.view.ReceiptFormat.MEMBERSHIP_DISCOUNT_PRICE;
-import static store.io.view.ReceiptFormat.PAYMENT;
-import static store.io.view.ReceiptFormat.PROMOTION_DISCOUNT_PRICE;
-import static store.io.view.ReceiptFormat.RECEIPT_DISCOUNT_FORMAT;
-import static store.io.view.ReceiptFormat.RECEIPT_GIFT_FORMAT;
-import static store.io.view.ReceiptFormat.RECEIPT_GIFT_HEADER;
-import static store.io.view.ReceiptFormat.RECEIPT_HEADER;
-import static store.io.view.ReceiptFormat.RECEIPT_INFORMATION_FORMAT;
-import static store.io.view.ReceiptFormat.RECEIPT_PAYMENT_FORMAT;
-import static store.io.view.ReceiptFormat.TOTAL_PRICE;
-
 import java.text.NumberFormat;
 import java.util.Locale;
-import store.domain.user.ShoppingProduct;
-import store.dto.Gift;
 import store.dto.ItemStatus;
 import store.dto.Receipt;
 
@@ -44,11 +27,8 @@ public class OutputView {
     }
 
     public void printReceipt(final Receipt receipt) {
-        System.out.println(NEW_LINE + RECEIPT_HEADER);
-        printItemInformation(receipt);
-        printGiftInformation(receipt);
-        System.out.println(DIVIDING_LINE);
-        printPriceInformation(receipt);
+        ReceiptFormatter receiptFormatter = new ReceiptFormatter();
+        receiptFormatter.printReceipt(receipt);
     }
 
     public void printErrorMessage(final String message) {
@@ -60,30 +40,5 @@ public class OutputView {
             return SOLD_OUT;
         }
         return quantity + QUANTITY_UNIT;
-    }
-
-    private void printItemInformation(final Receipt receipt) {
-        System.out.printf(RECEIPT_INFORMATION_FORMAT, ITEM_NAME, ITEM_QUANTITY, ITEM_PRICE);
-        for (ShoppingProduct product : receipt.purchasedProducts()) {
-            System.out.printf(RECEIPT_INFORMATION_FORMAT, product.getName(), numberFormat.format(product.getQuantity()),
-                    numberFormat.format(product.getPrice()));
-        }
-    }
-
-    private void printGiftInformation(final Receipt receipt) {
-        System.out.println(RECEIPT_GIFT_HEADER);
-        for (Gift gift : receipt.gifts()) {
-            System.out.printf(RECEIPT_GIFT_FORMAT, gift.name(), numberFormat.format(gift.quantity()));
-        }
-    }
-
-    private void printPriceInformation(final Receipt receipt) {
-        System.out.printf(RECEIPT_INFORMATION_FORMAT, TOTAL_PRICE, numberFormat.format(receipt.totalCount()),
-                numberFormat.format(receipt.totalPrice()));
-        System.out.printf(RECEIPT_DISCOUNT_FORMAT, PROMOTION_DISCOUNT_PRICE,
-                numberFormat.format(receipt.promotionDiscountPrice()));
-        System.out.printf(RECEIPT_DISCOUNT_FORMAT, MEMBERSHIP_DISCOUNT_PRICE,
-                numberFormat.format(receipt.memberShipDiscountPrice()));
-        System.out.printf(RECEIPT_PAYMENT_FORMAT, PAYMENT, numberFormat.format(receipt.payment()));
     }
 }

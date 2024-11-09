@@ -25,7 +25,7 @@ public class Calculator {
         int memberShipDiscountPrice = calculateMemberShipDiscountPrice(hasMembershipBenefit, totalPrice);
         int payment = totalPrice - (promotionDiscountPrice + memberShipDiscountPrice);
         int totalCount = calculateTotalCount();
-        return Receipt.generate(cart, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment,
+        return new Receipt(cart, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment,
                 totalCount);
     }
 
