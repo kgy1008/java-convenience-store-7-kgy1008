@@ -19,7 +19,8 @@ public class Calculator {
 
     public Receipt calculatePrice(final boolean hasMembershipBenefit) {
         int totalPrice = calculateTotalPrice();
-   
+        int promotionDiscountPrice = calculatePromotionDiscountPrice();
+
     }
 
     private int calculateTotalPrice() {
@@ -29,4 +30,14 @@ public class Calculator {
                 )
                 .sum();
     }
+
+    private int calculatePromotionDiscountPrice() {
+        return gifts.stream()
+                .mapToInt(gift ->
+                        gift.quantity() * gift.price()
+                )
+                .sum();
+    }
+
+
 }
