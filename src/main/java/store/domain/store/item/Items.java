@@ -1,14 +1,16 @@
 package store.domain.store.item;
 
-import static store.common.ErrorMessage.INVALID_INPUT;
+import static store.common.ErrorMessage.NOT_FOUND;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import store.common.exception.AppException;
 import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
 
 public class Items {
+
     private final List<Item> items;
 
     public Items(final List<Item> items) {
@@ -27,23 +29,30 @@ public class Items {
                 .sum();
     }
 
+    public Item findItemByName(final String name) {
+        return items.stream()
+                .filter(item -> item.isEqual(name))
+                .findFirst()
+                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
+    }
+
     public int checkRemainingPromotionStock(final String name) {
-        Item item = findPromotionItemByName(name);
-        return item.getQuantity();
+        return findPromotionItemByName(name)
+                .map(Item::getQuantity)
+                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
     }
 
     public int getPromotionBundleSize(final String name, final Promotions promotions) {
-        Item item = findPromotionItemByName(name);
-        String promotionName = item.getPromotionName();
-        Promotion promotion = findPromotionByName(promotionName, promotions);
-        return promotion.getPromotionBundleSize();
+        return findPromotionItemByName(name)
+                .map(item -> findPromotionByName(item.getPromotionName(), promotions))
+                .map(Promotion::getPromotionBundleSize)
+                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
     }
 
-    private Item findPromotionItemByName(final String name) {
+    public Optional<Item> findPromotionItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.findPromotionItemByName(name))
-                .findFirst()
-                .orElseThrow(() -> new AppException(INVALID_INPUT.getMessage()));
+                .findFirst();
     }
 
     private Promotion findPromotionByName(final String name, final Promotions promotions) {

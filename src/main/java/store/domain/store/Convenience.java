@@ -1,6 +1,7 @@
 package store.domain.store;
 
 import java.util.List;
+import java.util.Optional;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
@@ -40,6 +41,11 @@ public class Convenience {
         return inputQuantity - promoItemsAvailableSize;
     }
 
+    public boolean isPromotionProduct(final ShoppingProduct shoppingProduct) {
+        Optional<Item> item = items.findPromotionItemByName(shoppingProduct.getName());
+        return item.isPresent();
+    }
+
     public List<Item> getItems() {
         return items.getItems();
     }
@@ -48,7 +54,6 @@ public class Convenience {
         int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
         int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
         int fullPromotionGroupCount = remainingStock / promotionGroupSize;
-
         return fullPromotionGroupCount * promotionGroupSize;
     }
 

@@ -43,7 +43,7 @@ public class ConvenienceController {
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
-        calculatePrice(receiveMembershipBenefit);
+
     }
 
     private void displayProduct() {
@@ -62,11 +62,13 @@ public class ConvenienceController {
 
     private void checkPromotionPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
-            if (convenience.isPromotionNotApplicableToAllItems(shoppingProduct)) {
-                handlePromotionStockShortage(shoppingProduct);
-            }
-            if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
-                handleAdditionalBenefit(shoppingProduct);
+            if (convenience.isPromotionProduct(shoppingProduct)) {
+                if (convenience.isPromotionNotApplicableToAllItems(shoppingProduct)) {
+                    handlePromotionStockShortage(shoppingProduct);
+                }
+                if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
+                    handleAdditionalBenefit(shoppingProduct);
+                }
             }
         }
     }
@@ -107,10 +109,6 @@ public class ConvenienceController {
         return true;
     }
 
-    private void calculatePrice(final boolean hasMembershipBenefit) {
-        List<ShoppingProduct> shoppingProducts = customer.getCart();
-        convenience.calculatePrice(shoppingProducts);
-    }
 
     private KioskStatus askForBuyMore() {
         UserResponse userResponse = inputView.askForBuyMore();
