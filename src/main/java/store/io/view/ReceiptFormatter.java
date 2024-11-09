@@ -49,15 +49,16 @@ public final class ReceiptFormatter {
     private void printPromotionItemInformation(final Receipt receipt) {
         for (PromotionItem promotionItem : receipt.promotionItems()) {
             String formattedQuantity = numberFormat.format(promotionItem.getQuantity());
-            String formattedPrice = numberFormat.format(promotionItem.getPrice());
-            System.out.println(formatLine(promotionItem.getName(), formattedQuantity, formattedPrice));
+            String formattedTotalPriceOfItem = numberFormat.format(
+                    promotionItem.getPrice() * promotionItem.getQuantity());
+            System.out.println(formatLine(promotionItem.getName(), formattedQuantity, formattedTotalPriceOfItem));
         }
     }
 
     private void printBasicItemInformation(final Receipt receipt) {
         for (BasicItem basicItem : receipt.basicItems()) {
             String formattedQuantity = numberFormat.format(basicItem.getQuantity());
-            String formattedPrice = numberFormat.format(basicItem.getPrice());
+            String formattedPrice = numberFormat.format(basicItem.getPrice() * basicItem.getQuantity());
             System.out.println(formatLine(basicItem.getName(), formattedQuantity, formattedPrice));
         }
     }
