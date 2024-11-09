@@ -3,37 +3,48 @@ package store.dto;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import store.domain.user.ShoppingProduct;
+import store.domain.store.item.BasicItem;
+import store.domain.store.item.PromotionItem;
 
 public record Receipt(
-        List<ShoppingProduct> purchasedProducts,
-        List<Gift> gifts,
+        List<PromotionItem> promotionItems,
+        List<BasicItem> basicItems,
+        List<FreeItem> freeItems,
         int totalPrice,
         int promotionDiscountPrice,
-        int memberShipDiscountPrice,
+        int membershipDiscountPrice,
         int payment,
         int totalCount
 ) {
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
     private static final String MINUS = "-";
 
-    public String getTotalPrice() {
+    public static Receipt from(final List<PromotionItem> promotionItems, final List<BasicItem> basicItems,
+                               final List<FreeItem> freeItems,
+                               final int totalPrice, final int promotionDiscountPrice,
+                               final int membershipDiscountPrice, final int payment, final int totalCount) {
+        return new Receipt(promotionItems, basicItems, freeItems, totalPrice, promotionDiscountPrice,
+                membershipDiscountPrice,
+                payment, totalCount);
+    }
+
+    public String getFormattedTotalPrice() {
         return numberFormat.format(totalPrice);
     }
 
-    public String getTotalCount() {
-        return numberFormat.format(totalCount);
-    }
-
-    public String getPromotionDiscountPrice() {
+    public String getFormattedPromotionDiscountPrice() {
         return MINUS + numberFormat.format(promotionDiscountPrice);
     }
 
-    public String getMemberShipDiscountPrice() {
-        return MINUS + numberFormat.format(memberShipDiscountPrice);
+    public String getFormattedMembershipDiscountPrice() {
+        return MINUS + numberFormat.format(membershipDiscountPrice);
     }
 
-    public String getPayment() {
+    public String getFormattedPayment() {
         return numberFormat.format(payment);
+    }
+
+    public String getFormattedTotalCount() {
+        return numberFormat.format(totalCount);
     }
 }

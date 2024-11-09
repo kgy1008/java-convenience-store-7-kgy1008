@@ -68,36 +68,19 @@ public class Convenience {
         return (promotionItem.getQuantity() % promotionGroupSize) != EXACT_MATCH;
     }
 
-
-    /*
-    public Receipt generateReceipt(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
-        List<Gift> gifts = getGifts(shoppingProducts);
-        Calculator calculator = new Calculator(shoppingProducts, gifts);
-        return calculator.calculatePrice(hasMembershipBenefit);
-    }
-
-
-    private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
-        return shoppingProducts.stream()
-                .filter(this::isPromotionProduct)
-                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product), product.getPrice(),
-                        items.getPromotionBundleSize(product.getName(), promotions)))
-                .toList();
-    }
-
-
-    private int calculateNumberOfGift(final ShoppingProduct shoppingProduct) {
-        int promotionItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
-        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
+    int calculateNumberOfFreeItem(final PromotionItem promotionItem) {
+        int promotionItemsAvailableSize = calculateMaxCountOfPromotionApplied(promotionItem);
+        int promotionGroupSize = items.getPromotionBundleSize(promotionItem.getName(), promotions);
         int maxStockBasedPromotionApplied = promotionItemsAvailableSize / promotionGroupSize;
 
-        int inputPromotionAppliedCount = shoppingProduct.getQuantity() / promotionGroupSize;
+        int inputPromotionAppliedCount = promotionItem.getQuantity() / promotionGroupSize;
 
         return Math.min(maxStockBasedPromotionApplied, inputPromotionAppliedCount);
     }
 
-
-     */
+    int findPromotionBundleSizee(final PromotionItem promotionItem) {
+        return items.getPromotionBundleSize(promotionItem.getName(), promotions);
+    }
 
     public Items getItems() {
         return items;
