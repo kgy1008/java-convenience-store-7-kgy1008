@@ -28,7 +28,7 @@ public class ConvenienceController {
         this.customer = new Customer();
     }
 
-    public void start() {
+    public void purchase() {
         retryHandler.retryTemplate(this::displayProduct);
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
@@ -71,22 +71,18 @@ public class ConvenienceController {
 
     private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
         int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
-        UserResponse userResponse = retryHandler.retryTemplate(() -> {
-            String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount);
-            return UserResponse.from(answer);
-        });
-
+        UserResponse userResponse = retryHandler.retryTemplate(() ->
+                inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount)
+        );
         if (userResponse == UserResponse.NO) {
             customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
         }
     }
 
     private void handleAdditionalBenefit(final ShoppingProduct shoppingProduct) {
-        UserResponse userResponse = retryHandler.retryTemplate(() -> {
-            String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
-            return UserResponse.from(answer);
-        });
-
+        UserResponse userResponse = retryHandler.retryTemplate(() ->
+                inputView.askForBenefitWithAdditional(shoppingProduct.getName())
+        );
         if (userResponse == UserResponse.YES) {
             customer.addCart(shoppingProduct);
         }
@@ -94,17 +90,12 @@ public class ConvenienceController {
 
     private boolean checkMemberShipBenefit() {
         return retryHandler.retryTemplate(() -> {
-            UserResponse userResponse = getMembershipResponse();
+            UserResponse userResponse = inputView.askForGetMembershipBenefit();
             if (userResponse == UserResponse.YES) {
                 return verifyMembership();
             }
             return false;
         });
-    }
-
-    private UserResponse getMembershipResponse() {
-        String answer = inputView.askForGetMembershipBenefit();
-        return UserResponse.from(answer);
     }
 
     private boolean verifyMembership() {
