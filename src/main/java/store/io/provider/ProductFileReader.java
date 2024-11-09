@@ -18,24 +18,50 @@ public class ProductFileReader {
     private static final String DELIMITER = ",";
     private static final int HEADER_LINE = 1;
     private static final String NO_PROMOTION = "";
+    private static final int EMPTY = 0;
 
     public Items getItems() {
         try {
-            List<Item> allItems = readAllItems();
-            List<Item> itemsWithBaseItems = addMissingBaseItems(allItems);
-            return new Items(itemsWithBaseItems);
+            List<String> lines = Files.readAllLines(Paths.get(PRODUCT_FILE_PATH));
+            return new Items(processLines(lines));
         } catch (IOException e) {
             throw new FileReadException(CAN_NOT_READ.getMessage(), e);
         }
     }
 
-    private List<Item> readAllItems() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(PRODUCT_FILE_PATH));
+    private List<Item> processLines(final List<String> lines) {
         List<Item> items = new ArrayList<>();
+        Item previousItem = null;
         for (String line : lines.stream().skip(HEADER_LINE).toList()) {
-            items.add(parseItem(line));
+            previousItem = processLine(line, items, previousItem);
         }
+        addBaseItemForLastItem(items, previousItem);
         return items;
+    }
+
+    private Item processLine(final String line, final List<Item> items, final Item previousItem) {
+        Item currentItem = parseItem(line);
+        if (shouldAddBaseItem(previousItem, currentItem)) {
+            addBaseItemIfMissing(items, previousItem);
+        }
+        items.add(currentItem);
+        return currentItem;
+    }
+
+    private void addBaseItemForLastItem(final List<Item> items, final Item previousItem) {
+        if (previousItem != null && isPromotionalItem(previousItem) && isBaseItemMissing(items, previousItem)) {
+            items.add(createBaseItem(previousItem));
+        }
+    }
+
+    private boolean shouldAddBaseItem(final Item previousItem, final Item currentItem) {
+        return previousItem != null && !previousItem.getName().equals(currentItem.getName());
+    }
+
+    private void addBaseItemIfMissing(final List<Item> items, final Item item) {
+        if (isPromotionalItem(item) && isBaseItemMissing(items, item)) {
+            items.add(createBaseItem(item));
+        }
     }
 
     private Item parseItem(final String line) {
@@ -62,27 +88,18 @@ public class ProductFileReader {
         return name;
     }
 
-    private List<Item> addMissingBaseItems(List<Item> allItems) {
-        List<Item> itemsWithBaseItems = new ArrayList<>(allItems);
-        for (Item item : allItems) {
-            if (isPromotionalItem(item) && !hasBaseItem(allItems, item)) {
-                itemsWithBaseItems.add(createBaseItem(item));
-            }
-        }
-        return itemsWithBaseItems;
-    }
-
-    private boolean isPromotionalItem(Item item) {
+    private boolean isPromotionalItem(final Item item) {
         return !item.getPromotionName().equals(NO_PROMOTION);
     }
 
-    private boolean hasBaseItem(List<Item> allItems, Item promotionalItem) {
-        return allItems.stream()
-                .anyMatch(existingItem -> existingItem.getName().equals(promotionalItem.getName()) &&
+    private boolean isBaseItemMissing(final List<Item> items, final Item promotionalItem) {
+        return items.stream()
+                .noneMatch(existingItem -> existingItem.getName().equals(promotionalItem.getName()) &&
                         existingItem.getPromotionName().equals(NO_PROMOTION));
     }
 
-    private Item createBaseItem(Item promotionalItem) {
-        return new Item(promotionalItem.getName(), promotionalItem.getPrice(), 0, NO_PROMOTION);
+    private Item createBaseItem(final Item promotionalItem) {
+        return new Item(promotionalItem.getName(), promotionalItem.getPrice(), EMPTY, NO_PROMOTION);
     }
 }
+
