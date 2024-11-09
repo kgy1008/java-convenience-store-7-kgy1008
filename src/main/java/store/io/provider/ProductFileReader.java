@@ -1,11 +1,13 @@
 package store.io.provider;
 
 import static store.common.ErrorMessage.CAN_NOT_READ;
+import static store.common.ErrorMessage.INVALID_FORMAT;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import store.common.exception.AppException;
 import store.common.exception.FileReadException;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
@@ -33,10 +35,18 @@ public class ProductFileReader {
     private Item parseItem(final String line) {
         String[] values = line.split(DELIMITER);
         String name = values[0];
-        int price = Integer.parseInt(values[1]);
-        int quantity = Integer.parseInt(values[2]);
+        int price = convertStringToInt(values[1]);
+        int quantity = convertStringToInt(values[2]);
         String promotionName = setPromotionName(values[3]);
         return new Item(name, price, quantity, promotionName);
+    }
+
+    private int convertStringToInt(final String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new AppException(INVALID_FORMAT.getMessage());
+        }
     }
 
     private String setPromotionName(final String name) {

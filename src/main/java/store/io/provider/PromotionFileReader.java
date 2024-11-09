@@ -1,6 +1,7 @@
 package store.io.provider;
 
 import static store.common.ErrorMessage.CAN_NOT_READ;
+import static store.common.ErrorMessage.INVALID_FORMAT;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import store.common.exception.AppException;
 import store.common.exception.FileReadException;
 import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.PromotionType;
@@ -43,9 +45,17 @@ public class PromotionFileReader {
     }
 
     private PromotionType findPromotionType(final String[] values) {
-        int countOfBuy = Integer.parseInt(values[1]);
-        int freeToGet = Integer.parseInt(values[2]);
+        int countOfBuy = convertStringToInt(values[1]);
+        int freeToGet = convertStringToInt(values[2]);
         return PromotionType.findPromotionType(countOfBuy, freeToGet);
+    }
+
+    private int convertStringToInt(final String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new AppException(INVALID_FORMAT.getMessage());
+        }
     }
 }
 
