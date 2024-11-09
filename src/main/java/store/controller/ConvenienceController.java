@@ -141,7 +141,7 @@ public class ConvenienceController {
     }
 
     private KioskStatus askForBuyMore() {
-        UserResponse userResponse = inputView.askForBuyMore();
+        UserResponse userResponse = retryTemplate(inputView::askForBuyMore);
         return KioskStatus.turnOnOrOff(userResponse);
     }
 
