@@ -61,22 +61,13 @@ public class ConvenienceController {
 
     private void checkPromotionPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
-            if (isPromotionStockExceeded(shoppingProduct)) {
+            if (convenience.isGreaterThanPromotionRemaingStock(shoppingProduct)) {
                 handlePromotionStockWarning(shoppingProduct);
             }
-
-            if (isReceiveAdditionalBenefit(shoppingProduct)) {
+            if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
                 handleAdditionalBenefit(shoppingProduct);
             }
         }
-    }
-
-    private boolean isPromotionStockExceeded(final ShoppingProduct shoppingProduct) {
-        return convenience.isGreaterThanPromotionRemaingStock(shoppingProduct);
-    }
-
-    private boolean isReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
-        return convenience.canReceiveAdditionalBenefit(shoppingProduct);
     }
 
     private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
