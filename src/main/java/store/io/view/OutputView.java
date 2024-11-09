@@ -3,7 +3,6 @@ package store.io.view;
 import java.text.NumberFormat;
 import java.util.Locale;
 import store.dto.ItemStatus;
-import store.dto.Receipt;
 
 public class OutputView {
 
@@ -23,13 +22,15 @@ public class OutputView {
         itemStatus.getItemDetails().forEach(itemDetail -> System.out.printf("- %s %s원 %s %s%s", itemDetail.name(),
                 numberFormat.format(itemDetail.price()), formatQuantity(itemDetail.quantity()), itemDetail.promotion(),
                 NEW_LINE));
-        System.out.print(NEW_LINE);
     }
 
+    /*
     public void printReceipt(final Receipt receipt) {
         ReceiptFormatter receiptFormatter = new ReceiptFormatter();
         receiptFormatter.printReceipt(receipt);
     }
+
+     */
 
     public void printErrorMessage(final String message) {
         System.out.println(message);
