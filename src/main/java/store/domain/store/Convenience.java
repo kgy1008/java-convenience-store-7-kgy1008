@@ -13,14 +13,14 @@ import store.dto.Receipt;
 public class Convenience {
 
     private static final int EXACT_MATCH = 0;
-    private final Updater updater;
+    private final Initializer initializer;
     private final Promotions promotions;
     private final Items items;
 
     public Convenience() {
-        this.updater = new Updater();
-        this.promotions = updater.updatePromotions();
-        this.items = updater.updateItems();
+        this.initializer = new Initializer();
+        this.promotions = initializer.initPromotions();
+        this.items = initializer.initItems();
     }
 
     public List<ShoppingProduct> checkPurchaseItems(final String input) {
@@ -70,10 +70,7 @@ public class Convenience {
         if (items.isExistPromotionProduct(shoppingProduct.getName())) {
             String promotionName = items.findPromotionNameOfItem(shoppingProduct.getName());
             Promotion promotion = promotions.findPromotionByName(promotionName);
-            if (promotion.isBetweenPromotionDuration(shoppingProduct.getDate())) {
-                return true;
-            }
-            return false;
+            return promotion.isBetweenPromotionDuration(shoppingProduct.getDate());
         }
         return false;
     }

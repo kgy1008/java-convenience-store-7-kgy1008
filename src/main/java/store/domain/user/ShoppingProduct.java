@@ -14,7 +14,7 @@ public class ShoppingProduct {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.date = LocalDate.now();
+        this.date = LocalDate.of(2024, 2, 1);
     }
 
     void decreaseQuantity(int count) {
