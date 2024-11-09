@@ -1,7 +1,14 @@
 package store.io.view;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+import store.domain.store.item.BasicItem;
+import store.domain.store.item.PromotionItem;
+import store.dto.FreeItem;
+import store.dto.Receipt;
+
 public final class ReceiptFormatter {
-    /*
+
 
     static final String RECEIPT_HEADER = "==============W 편의점================";
     static final String RECEIPT_GIFT_HEADER = "=============증\t    정===============";
@@ -35,26 +42,39 @@ public final class ReceiptFormatter {
     }
 
     private void printItemInformation(final Receipt receipt) {
-        for (ShoppingProduct product : receipt.purchasedProducts()) {
-            String formattedQuantity = numberFormat.format(product.getQuantity());
-            String formattedPrice = numberFormat.format(product.getPrice());
-            System.out.println(formatLine(product.getName(), formattedQuantity, formattedPrice));
+        printPromotionItemInformation(receipt);
+        printBasicItemInformation(receipt);
+    }
+
+    private void printPromotionItemInformation(final Receipt receipt) {
+        for (PromotionItem promotionItem : receipt.promotionItems()) {
+            String formattedQuantity = numberFormat.format(promotionItem.getQuantity());
+            String formattedPrice = numberFormat.format(promotionItem.getPrice());
+            System.out.println(formatLine(promotionItem.getName(), formattedQuantity, formattedPrice));
+        }
+    }
+
+    private void printBasicItemInformation(final Receipt receipt) {
+        for (BasicItem basicItem : receipt.basicItems()) {
+            String formattedQuantity = numberFormat.format(basicItem.getQuantity());
+            String formattedPrice = numberFormat.format(basicItem.getPrice());
+            System.out.println(formatLine(basicItem.getName(), formattedQuantity, formattedPrice));
         }
     }
 
     private void printGiftInformation(final Receipt receipt) {
         System.out.println(RECEIPT_GIFT_HEADER);
-        for (Gift gift : receipt.gifts()) {
-            System.out.println(formatGiftLine(gift.name(), gift.getQuantity()));
+        for (FreeItem freeItem : receipt.freeItems()) {
+            System.out.println(formatGiftLine(freeItem.name(), freeItem.getFormattedQuantity()));
         }
     }
 
     private void printPriceInformation(final Receipt receipt) {
         System.out.println(DIVIDING_LINE);
-        System.out.println(formatLine(TOTAL_PRICE, receipt.getTotalCount(), receipt.getTotalPrice()));
-        System.out.println(formatPriceLine(PROMOTION_DISCOUNT_PRICE, receipt.getPromotionDiscountPrice()));
-        System.out.println(formatPriceLine(MEMBERSHIP_DISCOUNT_PRICE, receipt.getMemberShipDiscountPrice()));
-        System.out.println(formatPriceLine(PAYMENT, receipt.getPayment()));
+        System.out.println(formatLine(TOTAL_PRICE, receipt.getFormattedTotalCount(), receipt.getFormattedTotalPrice()));
+        System.out.println(formatPriceLine(PROMOTION_DISCOUNT_PRICE, receipt.getFormattedPromotionDiscountPrice()));
+        System.out.println(formatPriceLine(MEMBERSHIP_DISCOUNT_PRICE, receipt.getFormattedMembershipDiscountPrice()));
+        System.out.println(formatPriceLine(PAYMENT, receipt.getFormattedPayment()));
     }
 
     private String formatLine(String name, String quantity, String price) {
@@ -71,6 +91,4 @@ public final class ReceiptFormatter {
         return String.format("%-" + NAME_WIDTH + "s %" + (QUANTITY_WIDTH + PRICE_WIDTH) + "s",
                 label, price);
     }
-
-     */
 }
