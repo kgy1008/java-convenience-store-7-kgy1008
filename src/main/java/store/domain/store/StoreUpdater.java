@@ -5,20 +5,20 @@ import store.domain.store.promotion.Promotions;
 import store.io.provider.ProductFileReader;
 import store.io.provider.PromotionFileReader;
 
-public class StoreInitializer {
+public class StoreUpdater {
     private final ProductFileReader productFileReader;
     private final PromotionFileReader promotionFileReader;
 
-    StoreInitializer() {
+    StoreUpdater() {
         this.productFileReader = new ProductFileReader();
         this.promotionFileReader = new PromotionFileReader();
     }
 
-    Promotions initPromotions() {
+    Promotions updatePromotions() {
         return promotionFileReader.getPromotions();
     }
 
-    Items initItems(final Promotions promotions) {
-        return productFileReader.getItems(promotions);
+    Items updateItems() {
+        return productFileReader.getItems();
     }
 }
