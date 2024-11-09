@@ -1,18 +1,13 @@
 package store.controller;
 
-import static store.common.ErrorMessage.UNAUTHORIZED_EXCEPTION;
 import static store.domain.store.KioskStatus.ON;
 
 import java.util.List;
-import store.common.exception.AppException;
 import store.domain.store.Convenience;
 import store.domain.store.KioskStatus;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
-import store.domain.user.ShoppingProduct;
-import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
-import store.dto.Receipt;
 import store.io.view.InputView;
 import store.io.view.OutputView;
 
@@ -33,20 +28,28 @@ public class ConvenienceController {
 
     public void run() {
         KioskStatus kioskStatus = ON;
+        displayProduct();
+        /*
         while (kioskStatus == ON) {
             purchase();
-            kioskStatus = askForBuyMore();
+            // kioskStatus = askForBuyMore();
         }
+        *
+         */
     }
 
     private void purchase() {
         retryHandler.retryTemplate(this::displayProduct);
+        /*
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
         Receipt receipt = calculatePrice(receiveMembershipBenefit);
         displayReceipt(receipt);
+
+         */
     }
+
 
     private void displayProduct() {
         outputView.printWelcomeMessage();
@@ -54,6 +57,7 @@ public class ConvenienceController {
         ItemStatus itemStatus = new ItemStatus(items);
         outputView.printProducts(itemStatus);
     }
+        /*
 
     private List<ShoppingProduct> tryToBuy() {
         String shoppingItems = retryHandler.retryTemplate(inputView::inputShoppingItems);
@@ -125,4 +129,6 @@ public class ConvenienceController {
         customer.finishShopping();
         return KioskStatus.turnOnOrOff(userResponse);
     }
+
+     */
 }

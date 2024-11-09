@@ -1,13 +1,7 @@
 package store.domain.store.item;
 
-import static store.common.ErrorMessage.NOT_FOUND;
-
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import store.common.exception.AppException;
-import store.domain.store.promotion.Promotion;
-import store.domain.store.promotion.Promotions;
 
 public class Items {
 
@@ -16,6 +10,13 @@ public class Items {
     public Items(final List<Item> items) {
         this.items = items;
     }
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
+
+    /*
 
     public boolean isNotContain(final String name) {
         return items.stream()
@@ -60,10 +61,7 @@ public class Items {
         return item.getPromotionName();
     }
 
-    public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
-    }
-
+    /*
     private Optional<Item> findPromotionItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.findPromotionItemByName(name))
@@ -73,4 +71,6 @@ public class Items {
     private Promotion findPromotionByName(final String name, final Promotions promotions) {
         return promotions.findPromotionByName(name);
     }
+
+     */
 }

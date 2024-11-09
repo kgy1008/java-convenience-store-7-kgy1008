@@ -9,8 +9,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import store.common.exception.FileReadException;
+import store.domain.store.item.BasicItem;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
+import store.domain.store.item.PromotionItem;
 
 public class ProductFileReader {
 
@@ -40,7 +42,7 @@ public class ProductFileReader {
     }
 
     private Item processLine(final String line, final List<Item> items, final Item previousItem) {
-        Item currentItem = parseItem(line);
+        Item currentItem = parseData(line);
         if (shouldAddBaseItem(previousItem, currentItem)) {
             addBaseItemIfMissing(items, previousItem);
         }
@@ -50,7 +52,7 @@ public class ProductFileReader {
 
     private void addBaseItemForLastItem(final List<Item> items, final Item previousItem) {
         if (previousItem != null && isPromotionalItem(previousItem) && isBaseItemMissing(items, previousItem)) {
-            items.add(createBaseItem(previousItem));
+            items.add(createEmptyBaseItem(previousItem));
         }
     }
 
@@ -60,17 +62,20 @@ public class ProductFileReader {
 
     private void addBaseItemIfMissing(final List<Item> items, final Item item) {
         if (isPromotionalItem(item) && isBaseItemMissing(items, item)) {
-            items.add(createBaseItem(item));
+            items.add(createEmptyBaseItem(item));
         }
     }
 
-    private Item parseItem(final String line) {
+    private Item parseData(final String line) {
         String[] values = line.split(DELIMITER);
         String name = values[0];
         int price = convertStringToInt(values[1]);
         int quantity = convertStringToInt(values[2]);
         String promotionName = setPromotionName(values[3]);
-        return new Item(name, price, quantity, promotionName);
+        if (promotionName.equals(NO_PROMOTION)) {
+            return new BasicItem(name, price, quantity);
+        }
+        return new PromotionItem(name, price, quantity, promotionName);
     }
 
     private int convertStringToInt(final String input) {
@@ -98,8 +103,8 @@ public class ProductFileReader {
                         existingItem.getPromotionName().equals(NO_PROMOTION));
     }
 
-    private Item createBaseItem(final Item promotionalItem) {
-        return new Item(promotionalItem.getName(), promotionalItem.getPrice(), EMPTY, NO_PROMOTION);
+    private Item createEmptyBaseItem(final Item promotionalItem) {
+        return new BasicItem(promotionalItem.getName(), promotionalItem.getPrice(), EMPTY);
     }
 }
 
