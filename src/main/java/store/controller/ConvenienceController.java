@@ -12,6 +12,7 @@ import store.domain.user.Customer;
 import store.domain.user.ShoppingProduct;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
+import store.dto.Receipt;
 import store.io.view.InputView;
 import store.io.view.OutputView;
 
@@ -43,7 +44,8 @@ public class ConvenienceController {
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
-
+        Receipt receipt = calculatePrice(receiveMembershipBenefit);
+        displayReceipt(receipt);
     }
 
     private void displayProduct() {
@@ -109,9 +111,18 @@ public class ConvenienceController {
         return true;
     }
 
+    private Receipt calculatePrice(final boolean hasMembershipBenefit) {
+        List<ShoppingProduct> shoppingProducts = customer.getCart();
+        return convenience.generateReceipt(shoppingProducts, hasMembershipBenefit);
+    }
+
+    private void displayReceipt(final Receipt receipt) {
+        outputView.printReceipt(receipt);
+    }
 
     private KioskStatus askForBuyMore() {
         UserResponse userResponse = inputView.askForBuyMore();
+        customer.finishShopping();
         return KioskStatus.turnOnOrOff(userResponse);
     }
 }
