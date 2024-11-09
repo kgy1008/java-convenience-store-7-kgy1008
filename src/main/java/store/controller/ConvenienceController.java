@@ -16,6 +16,7 @@ import store.domain.user.MemberShipType;
 import store.domain.user.ShoppingProducts;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
+import store.dto.Receipt;
 import store.io.view.InputView;
 import store.io.view.OutputView;
 
@@ -48,11 +49,8 @@ public class ConvenienceController {
         classifyProducts(products);
         checkPromotionPolicy();
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
-        /*
-        Receipt receipt = calculatePrice(receiveMembershipBenefit);
+        Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
         displayReceipt(receipt);
-
-         */
     }
 
     private void displayProduct() {
@@ -129,16 +127,15 @@ public class ConvenienceController {
         return true;
     }
 
-        /*
-    private Receipt calculatePrice(final boolean hasMembershipBenefit) {
-        List<ShoppingProduct> shoppingProducts = customer.getCart();
-        return convenience.generateReceipt(shoppingProducts, hasMembershipBenefit);
+
+    private Receipt calculatePurchaseAmount(final boolean hasMembershipBenefit) {
+        return cashier.generateReceipt(hasMembershipBenefit);
     }
 
     private void displayReceipt(final Receipt receipt) {
         outputView.printReceipt(receipt);
     }
-     */
+
 
     private KioskStatus askForBuyMore() {
         UserResponse userResponse = inputView.askForBuyMore();

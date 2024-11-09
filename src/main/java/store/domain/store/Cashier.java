@@ -8,25 +8,25 @@ import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.user.ShoppingProduct;
 import store.domain.user.ShoppingProducts;
+import store.dto.FreeItem;
+import store.dto.Receipt;
 
 public class Cashier {
 
     private static final int FREE_BENEFIT = 1;
 
     private final Convenience convenience;
-    private final List<PromotionItem> promotions;
+    private final List<PromotionItem> promotionItems;
     private final List<BasicItem> basicItems;
-    private final Calculator calculator;
 
     public Cashier(final Convenience convenience) {
         this.convenience = convenience;
-        this.promotions = new ArrayList<>();
+        this.promotionItems = new ArrayList<>();
         this.basicItems = new ArrayList<>();
-        this.calculator = new Calculator();
     }
 
     public void receiveAndClassifyItems(final ShoppingProducts shoppingProducts) {
-        Items items = convenience.getItems();
+        final Items items = convenience.getItems();
         for (ShoppingProduct shoppingProduct : shoppingProducts.getProducts()) {
             String name = shoppingProduct.getName();
             Item item = items.findItemByName(name);
@@ -41,7 +41,7 @@ public class Cashier {
     private void extractPromotionItems(final ShoppingProduct shoppingProduct, final Item item) {
         PromotionItem promotionItem = new PromotionItem(item.getName(), item.getPrice(), shoppingProduct.getQuantity(),
                 item.getPromotionName());
-        promotions.add(promotionItem);
+        promotionItems.add(promotionItem);
     }
 
     private void extractBasicItems(final ShoppingProduct shoppingProduct, final Item item) {
@@ -50,13 +50,13 @@ public class Cashier {
     }
 
     public List<PromotionItem> getExceedingPromotionItems() {
-        return promotions.stream()
+        return promotionItems.stream()
                 .filter(convenience::isPromotionNotApplicableToAllItems)
                 .toList();
     }
 
     public List<PromotionItem> getShortagePromotionItems() {
-        return promotions.stream()
+        return promotionItems.stream()
                 .filter(convenience::canReceiveAdditionalBenefit)
                 .toList();
     }
@@ -67,5 +67,29 @@ public class Cashier {
 
     public void addPromotionItemFromCart(final PromotionItem promotionItem) {
         promotionItem.increaseQuantity(FREE_BENEFIT);
+    }
+
+    public Receipt generateReceipt(final boolean hasMembershipBenefit) {
+        List<FreeItem> freeItems = findFreeItem(promotionItems);
+        Calculator calculator = new Calculator(freeItems);
+
+        int totalPrice = calculator.calculateTotalPrice(basicItems, promotionItems);
+        int promotionDiscountPrice = calculator.calculatePromotionDiscountPrice();
+        int memberShipDiscountPrice = calculator.calculateMemberShipDiscountPrice(hasMembershipBenefit, totalPrice);
+        int payment = totalPrice - (promotionDiscountPrice + memberShipDiscountPrice);
+        int totalCount = calculator.calculateTotalCount(basicItems, promotionItems);
+
+        return Receipt.from(promotionItems, basicItems, freeItems, totalPrice, promotionDiscountPrice,
+                memberShipDiscountPrice,
+                payment, totalCount);
+    }
+
+    private List<FreeItem> findFreeItem(final List<PromotionItem> promotionItems) {
+        return promotionItems.stream()
+                .map(product -> new FreeItem(product.getName(),
+                        convenience.calculateNumberOfFreeItem(product),
+                        product.getPrice(),
+                        convenience.findPromotionBundleSizee(product)))
+                .toList();
     }
 }

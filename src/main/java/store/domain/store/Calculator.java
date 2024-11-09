@@ -1,43 +1,47 @@
 package store.domain.store;
 
+import java.util.List;
+import store.domain.store.item.BasicItem;
+import store.domain.store.item.PromotionItem;
+import store.dto.FreeItem;
+
 public class Calculator {
-/*
+
     private static final int NO_MEMBERSHIP_DISCOUNT = 0;
     private static final int MAX_MEMBERSHIP_DISCOUNT = 8000;
     private static final double MEMBERSHIP_DISCOUNT_RATE = 0.3;
-    private final List<ShoppingProduct> cart;
-    private final List<Gift> gifts;
 
-    public Calculator(final List<ShoppingProduct> products, final List<Gift> gifts) {
-        this.cart = new ArrayList<>(products);
-        this.gifts = new ArrayList<>(gifts);
+    private final List<FreeItem> freeItems;
+
+    public Calculator(final List<FreeItem> freeItems) {
+        this.freeItems = freeItems;
     }
 
-    public Receipt calculatePrice(final boolean hasMembershipBenefit) {
-        int totalPrice = calculateTotalPrice();
-        int promotionDiscountPrice = calculatePromotionDiscountPrice();
-        int memberShipDiscountPrice = calculateMemberShipDiscountPrice(hasMembershipBenefit, totalPrice);
-        int payment = totalPrice - (promotionDiscountPrice + memberShipDiscountPrice);
-        int totalCount = calculateTotalCount();
-        return new Receipt(cart, gifts, totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment,
-                totalCount);
+    int calculateTotalPrice(final List<BasicItem> basicItems, final List<PromotionItem> promotionItems) {
+        int basicItemsPrice = calculatePriceOfBasicItems(basicItems);
+        int promotionItemsPrice = calculatePriceOfPromotionItems(promotionItems);
+        return basicItemsPrice + promotionItemsPrice;
     }
 
-    private int calculateTotalPrice() {
-        return cart.stream()
-                .mapToInt(product ->
-                        product.getQuantity() * product.getPrice()
-                )
+    private int calculatePriceOfBasicItems(final List<BasicItem> basicItems) {
+        return basicItems.stream()
+                .mapToInt(basicItem -> basicItem.getPrice() * basicItem.getQuantity())
                 .sum();
     }
 
-    private int calculatePromotionDiscountPrice() {
-        return gifts.stream()
-                .mapToInt(gift -> gift.quantity() * gift.price())
+    private int calculatePriceOfPromotionItems(final List<PromotionItem> promotionItems) {
+        return promotionItems.stream()
+                .mapToInt(promotionItem -> promotionItem.getPrice() * promotionItem.getQuantity())
                 .sum();
     }
 
-    private int calculateMemberShipDiscountPrice(final boolean hasMembershipBenefit, final int totalPrice) {
+    int calculatePromotionDiscountPrice() {
+        return freeItems.stream()
+                .mapToInt(freeItem -> freeItem.price() * freeItem.quantity())
+                .sum();
+    }
+
+    int calculateMemberShipDiscountPrice(final boolean hasMembershipBenefit, final int totalPrice) {
         if (hasMembershipBenefit) {
             int targetPrice = calculateTargetPrice(totalPrice);
             int finalPrice = (int) (targetPrice * MEMBERSHIP_DISCOUNT_RATE);
@@ -47,17 +51,27 @@ public class Calculator {
     }
 
     private int calculateTargetPrice(final int totalPrice) {
-        int noMemberShipDiscountTargetPrice = gifts.stream()
-                .mapToInt(gift -> gift.quantity() * gift.price() * gift.promotionGroupSize())
+        int noMemberShipDiscountTargetPrice = freeItems.stream()
+                .mapToInt(freeItem -> freeItem.quantity() * freeItem.price() * freeItem.promotionGroupSize())
                 .sum();
         return totalPrice - noMemberShipDiscountTargetPrice;
     }
 
-    private int calculateTotalCount() {
-        return cart.stream()
-                .mapToInt(ShoppingProduct::getQuantity)
+    int calculateTotalCount(final List<BasicItem> basicItems, final List<PromotionItem> promotionItems) {
+        int basicItemsCount = calculateNumberOfBasicItems(basicItems);
+        int promotionItemsCount = calculateNumberOfPromotionItems(promotionItems);
+        return basicItemsCount + promotionItemsCount;
+    }
+
+    private int calculateNumberOfBasicItems(final List<BasicItem> basicItems) {
+        return basicItems.stream()
+                .mapToInt(BasicItem::getQuantity)
                 .sum();
     }
 
- */
+    private int calculateNumberOfPromotionItems(final List<PromotionItem> promotionItems) {
+        return promotionItems.stream()
+                .mapToInt(PromotionItem::getQuantity)
+                .sum();
+    }
 }
