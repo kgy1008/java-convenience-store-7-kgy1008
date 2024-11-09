@@ -49,6 +49,12 @@ public class Items {
                 .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
     }
 
+    public List<Item> findItemsByName(final String name) {
+        return items.stream()
+                .filter(item -> item.isEqual(name))
+                .toList();
+    }
+
     public int checkRemainingPromotionStock(final String name) {
         Item promotionItem = findItemByName(name);
         return promotionItem.getQuantity();

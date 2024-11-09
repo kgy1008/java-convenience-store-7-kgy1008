@@ -91,7 +91,15 @@ public class Convenience {
 
     private void updatePromotionItemQuantity(final List<PromotionItem> soldPromotionItems) {
         for (PromotionItem soldPromotionItem : soldPromotionItems) {
-            Item promotionItem = items.findItemByName(soldPromotionItem.getName());
+            List<Item> items = this.items.findItemsByName(soldPromotionItem.getName());
+            Item promotionItem = items.getFirst();
+            if (promotionItem.getQuantity() < soldPromotionItem.getQuantity()) {
+                int remainSoldQuantity = soldPromotionItem.getQuantity() - promotionItem.getQuantity();
+                promotionItem.decreaseQuantity(promotionItem.getQuantity());
+                Item basicItem = items.getLast();
+                basicItem.decreaseQuantity(remainSoldQuantity);
+                continue;
+            }
             promotionItem.decreaseQuantity(soldPromotionItem.getQuantity());
         }
     }
