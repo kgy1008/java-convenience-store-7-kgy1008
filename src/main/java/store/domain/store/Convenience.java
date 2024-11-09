@@ -80,26 +80,26 @@ public class Convenience {
         return Math.min(maxStockBasedPromotionApplied, inputPromotionAppliedCount);
     }
 
-    int findPromotionBundleSizee(final PromotionItem promotionItem) {
+    int findPromotionBundleSize(final PromotionItem promotionItem) {
         return items.getPromotionBundleSize(promotionItem.getName(), promotions);
     }
 
-    void updateItemQuantity(final List<PromotionItem> selledPromotionItems, final List<BasicItem> selledBasicItems) {
-        updatePromotionItemQuantity(selledPromotionItems);
-        updateBasicItemQuantity(selledBasicItems);
+    void updateItemQuantity(final List<PromotionItem> soldPromotionItems, final List<BasicItem> soldBasicItems) {
+        updatePromotionItemQuantity(soldPromotionItems);
+        updateBasicItemQuantity(soldBasicItems);
     }
 
-    private void updatePromotionItemQuantity(final List<PromotionItem> selledPromotionItems) {
-        for (PromotionItem selledPromotionItem : selledPromotionItems) {
-            Item promotionItem = items.findItemByName(selledPromotionItem.getName());
-            promotionItem.decreaseQuantity(selledPromotionItem.getQuantity());
+    private void updatePromotionItemQuantity(final List<PromotionItem> soldPromotionItems) {
+        for (PromotionItem soldPromotionItem : soldPromotionItems) {
+            Item promotionItem = items.findItemByName(soldPromotionItem.getName());
+            promotionItem.decreaseQuantity(soldPromotionItem.getQuantity());
         }
     }
 
-    private void updateBasicItemQuantity(final List<BasicItem> selledBasicItems) {
-        for (BasicItem selledBasicItem : selledBasicItems) {
-            Item basicItem = items.findItemByName(selledBasicItem.getName());
-            basicItem.decreaseQuantity(selledBasicItem.getQuantity());
+    private void updateBasicItemQuantity(final List<BasicItem> soldBasicItems) {
+        for (BasicItem soldBasicItem : soldBasicItems) {
+            Item basicItem = items.findItemByName(soldBasicItem.getName());
+            basicItem.decreaseQuantity(soldBasicItem.getQuantity());
         }
     }
 

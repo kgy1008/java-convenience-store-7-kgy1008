@@ -89,7 +89,7 @@ public class Cashier {
                 .map(product -> new FreeItem(product.getName(),
                         convenience.calculateNumberOfFreeItem(product),
                         product.getPrice(),
-                        convenience.findPromotionBundleSizee(product)))
+                        convenience.findPromotionBundleSize(product)))
                 .toList();
     }
 
