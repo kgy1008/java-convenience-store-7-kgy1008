@@ -20,21 +20,36 @@ public class Convenience {
         this.items = initializer.updateItems();
     }
 
-    public List<Item> getItems() {
-        return items.getItems();
-    }
-
     public List<ShoppingProduct> checkPurchaseItems(final String input) {
         ProductFormatter productFormatter = new ProductFormatter();
         return productFormatter.convertStringToItem(input, items);
     }
 
-    public boolean isGreaterThanPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
-        return items.checkRemainingPromotionStock(shoppingProduct.getName()) < shoppingProduct.getQuantity();
+    public boolean isPromotionNotApplicableToAllItems(final ShoppingProduct shoppingProduct) {
+        return calculateMaxCountOfPromotionItemsAvailable(shoppingProduct) < shoppingProduct.getQuantity();
     }
 
     public boolean canReceiveAdditionalBenefit(final ShoppingProduct shoppingProduct) {
         return isLessThanPromotionRemaingStock(shoppingProduct) && isLessThanPromotionStandard(shoppingProduct);
+    }
+
+    public int calculateItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
+        int inputQuantity = shoppingProduct.getQuantity();
+
+        int promoItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
+        return inputQuantity - promoItemsAvailableSize;
+    }
+
+    public List<Item> getItems() {
+        return items.getItems();
+    }
+
+    private int calculateMaxCountOfPromotionItemsAvailable(final ShoppingProduct shoppingProduct) {
+        int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
+        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
+
+        return fullPromotionGroupCount * promotionGroupSize;
     }
 
     private boolean isLessThanPromotionRemaingStock(final ShoppingProduct shoppingProduct) {
@@ -44,15 +59,5 @@ public class Convenience {
     private boolean isLessThanPromotionStandard(final ShoppingProduct shoppingProduct) {
         int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
         return shoppingProduct.getQuantity() % promotionGroupSize != EXACT_MATCH;
-    }
-
-    public int getItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
-        int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
-        int inputQuantity = shoppingProduct.getQuantity();
-
-        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
-        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
-
-        return inputQuantity - (fullPromotionGroupCount * promotionGroupSize);
     }
 }
