@@ -1,6 +1,9 @@
 package store.controller;
 
+import static store.common.ErrorMessage.UNAUTHORIZED_EXCEPTION;
+
 import java.util.List;
+import store.common.exception.AppException;
 import store.domain.store.Convenience;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
@@ -29,6 +32,7 @@ public class ConvenienceController {
         retryHandler.retryTemplate(this::displayProduct);
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
+        boolean receiveMembershipBenefit = checkMemberShipBenefit();
     }
 
     private void displayProduct() {
@@ -86,5 +90,27 @@ public class ConvenienceController {
         if (userResponse == UserResponse.YES) {
             customer.addCart(shoppingProduct);
         }
+    }
+
+    private boolean checkMemberShipBenefit() {
+        return retryHandler.retryTemplate(() -> {
+            UserResponse userResponse = getMembershipResponse();
+            if (userResponse == UserResponse.YES) {
+                return verifyMembership();
+            }
+            return false;
+        });
+    }
+
+    private UserResponse getMembershipResponse() {
+        String answer = inputView.askForGetMembershipBenefit();
+        return UserResponse.from(answer);
+    }
+
+    private boolean verifyMembership() {
+        if (!customer.hasMembership()) {
+            throw new AppException(UNAUTHORIZED_EXCEPTION.getMessage());
+        }
+        return true;
     }
 }
