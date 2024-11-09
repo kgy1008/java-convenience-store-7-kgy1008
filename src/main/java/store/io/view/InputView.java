@@ -21,7 +21,7 @@ public class InputView {
     private static final String DETAIL_DELIMITER = "-";
 
     public String inputShoppingItems() {
-        System.out.println(PURCHASE_MESSAGE);
+        System.out.println(NEW_LINE + PURCHASE_MESSAGE);
         String input = Console.readLine();
         validate(input);
         return input;
