@@ -11,6 +11,8 @@ import store.domain.user.ShoppingProducts;
 
 public class Cashier {
 
+    private static final int FREE_BENEFIT = 1;
+
     private final Convenience convenience;
     private final List<PromotionItem> promotions;
     private final List<BasicItem> basicItems;
@@ -45,5 +47,25 @@ public class Cashier {
     private void extractBasicItems(final ShoppingProduct shoppingProduct, final Item item) {
         BasicItem basicItem = new BasicItem(item.getName(), item.getPrice(), shoppingProduct.getQuantity());
         basicItems.add(basicItem);
+    }
+
+    public List<PromotionItem> getExceedingPromotionItems() {
+        return promotions.stream()
+                .filter(convenience::isPromotionNotApplicableToAllItems)
+                .toList();
+    }
+
+    public List<PromotionItem> getShortagePromotionItems() {
+        return promotions.stream()
+                .filter(convenience::canReceiveAdditionalBenefit)
+                .toList();
+    }
+
+    public void removePromotionItemFromCart(final PromotionItem promotionItem, final int itemsWithoutPromotionCount) {
+        promotionItem.decreaseQuantity(itemsWithoutPromotionCount);
+    }
+
+    public void addPromotionItemFromCart(final PromotionItem promotionItem) {
+        promotionItem.increaseQuantity(FREE_BENEFIT);
     }
 }
