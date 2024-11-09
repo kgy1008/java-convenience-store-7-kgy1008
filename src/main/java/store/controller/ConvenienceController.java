@@ -1,10 +1,12 @@
 package store.controller;
 
 import static store.common.ErrorMessage.UNAUTHORIZED_EXCEPTION;
+import static store.domain.store.KioskStatus.ON;
 
 import java.util.List;
 import store.common.exception.AppException;
 import store.domain.store.Convenience;
+import store.domain.store.KioskStatus;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
 import store.domain.user.ShoppingProduct;
@@ -26,6 +28,14 @@ public class ConvenienceController {
         this.retryHandler = new RetryHandler(outputView);
         this.convenience = new Convenience();
         this.customer = new Customer();
+    }
+
+    public void run() {
+        KioskStatus kioskStatus = ON;
+        while (kioskStatus == ON) {
+            purchase();
+
+        }
     }
 
     public void purchase() {
