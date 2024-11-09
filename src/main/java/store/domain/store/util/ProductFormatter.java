@@ -1,6 +1,20 @@
 package store.domain.store.util;
 
-/*
+
+import static store.common.ErrorMessage.CONFLICT_EXCEPTION;
+import static store.common.ErrorMessage.EXCEED_QUANTITY;
+import static store.common.ErrorMessage.INVALID_FORMAT;
+import static store.common.ErrorMessage.INVALID_INPUT;
+import static store.common.ErrorMessage.NOT_FOUND;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import store.common.exception.AppException;
+import store.domain.store.item.Items;
+import store.domain.user.ShoppingProduct;
+
 public class ProductFormatter {
 
     private static final String DELIMITER = ",";
@@ -22,8 +36,7 @@ public class ProductFormatter {
         String name = data[0];
         int quantity = convertStringToInt(data[1]);
         validate(name, quantity, items);
-        int price = findPrice(items, name);
-        return new ShoppingProduct(name, price, quantity);
+        return new ShoppingProduct(name, quantity);
     }
 
     private int convertStringToInt(final String input) {
@@ -54,11 +67,6 @@ public class ProductFormatter {
         }
     }
 
-    private int findPrice(final Items items, final String name) {
-        Item item = items.findItemByName(name);
-        return item.getPrice();
-    }
-
     private boolean isExceedQuantity(final String name, final int quantity, final Items items) {
         return items.checkRemainingStock(name) < quantity;
     }
@@ -71,4 +79,3 @@ public class ProductFormatter {
     }
 }
 
- */

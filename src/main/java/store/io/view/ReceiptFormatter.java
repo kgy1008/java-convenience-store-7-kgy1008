@@ -1,12 +1,7 @@
 package store.io.view;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-import store.domain.user.ShoppingProduct;
-import store.dto.Gift;
-import store.dto.Receipt;
-
 public final class ReceiptFormatter {
+    /*
 
     static final String RECEIPT_HEADER = "==============W 편의점================";
     static final String RECEIPT_GIFT_HEADER = "=============증\t    정===============";
@@ -76,4 +71,6 @@ public final class ReceiptFormatter {
         return String.format("%-" + NAME_WIDTH + "s %" + (QUANTITY_WIDTH + PRICE_WIDTH) + "s",
                 label, price);
     }
+
+     */
 }

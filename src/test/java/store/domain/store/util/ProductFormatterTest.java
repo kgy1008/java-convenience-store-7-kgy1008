@@ -8,17 +8,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import store.domain.store.item.Item;
+import store.domain.store.item.BasicItem;
 import store.domain.store.item.Items;
+import store.domain.store.item.PromotionItem;
 import store.domain.user.ShoppingProduct;
 
 class ProductFormatterTest {
 
     private final ProductFormatter productFormatter = new ProductFormatter();
     private final Items items = new Items(List.of(
-            new Item("콜라", 1800, 10, "탄산2+1"),
-            new Item("콜라", 1800, 5, ""),
-            new Item("새우깡", 3000, 15, "")
+            new PromotionItem("콜라", 1800, 10, "탄산2+1"),
+            new BasicItem("콜라", 1800, 5),
+            new BasicItem("새우깡", 3000, 15)
     ));
 
     @Test

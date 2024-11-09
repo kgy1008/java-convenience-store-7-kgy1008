@@ -11,13 +11,6 @@ public class Items {
         this.items = items;
     }
 
-    public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
-    }
-
-
-    /*
-
     public boolean isNotContain(final String name) {
         return items.stream()
                 .noneMatch(item -> item.isEqual(name));
@@ -30,6 +23,11 @@ public class Items {
                 .sum();
     }
 
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+
+    /*
     public Item findItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.isEqual(name))
@@ -61,7 +59,8 @@ public class Items {
         return item.getPromotionName();
     }
 
-    /*
+
+
     private Optional<Item> findPromotionItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.findPromotionItemByName(name))
@@ -71,6 +70,5 @@ public class Items {
     private Promotion findPromotionByName(final String name, final Promotions promotions) {
         return promotions.findPromotionByName(name);
     }
-
-     */
+    */
 }
