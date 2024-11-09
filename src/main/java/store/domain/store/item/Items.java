@@ -59,14 +59,4 @@ public class Items {
         Promotion promotion = promotions.findPromotionByName(promotionItem.getPromotionName());
         return promotion.getPromotionBundleSize();
     }
-
-    /*
-
-    public String findPromotionNameOfItem(final String name) {
-        Item item = findPromotionItemByName(name)
-                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
-        return item.getPromotionName();
-    }
-\
-    */
 }
