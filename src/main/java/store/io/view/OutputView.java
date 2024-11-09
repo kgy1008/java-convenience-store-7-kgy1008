@@ -20,6 +20,7 @@ public class OutputView {
                 System.out.printf("- %s %d원 %s %s%s", itemDetail.name(), itemDetail.price(),
                         formatQuantity(itemDetail.quantity()), itemDetail.promotion(), NEW_LINE)
         );
+        System.out.print(NEW_LINE);
     }
 
     private String formatQuantity(final int quantity) {
