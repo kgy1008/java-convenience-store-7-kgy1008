@@ -1,6 +1,5 @@
 package store.domain.store;
 
-import java.time.LocalDate;
 import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
@@ -51,7 +50,7 @@ public class Convenience {
 
     private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
         return shoppingProducts.stream()
-                .filter(product -> items.isExistPromotionProduct(product.getName()))
+                .filter(this::isPromotionProduct)
                 .map(product -> new Gift(product.getName(), calculateNumberOfGift(product), product.getPrice(),
                         items.getPromotionBundleSize(product.getName(), promotions)))
                 .toList();
@@ -68,11 +67,10 @@ public class Convenience {
     }
 
     public boolean isPromotionProduct(final ShoppingProduct shoppingProduct) {
-        LocalDate nowDate = LocalDate.now();
         if (items.isExistPromotionProduct(shoppingProduct.getName())) {
             String promotionName = items.findPromotionNameOfItem(shoppingProduct.getName());
             Promotion promotion = promotions.findPromotionByName(promotionName);
-            if (promotion.isBetweenPromotionDuration(nowDate)) {
+            if (promotion.isBetweenPromotionDuration(shoppingProduct.getDate())) {
                 return true;
             }
             return false;

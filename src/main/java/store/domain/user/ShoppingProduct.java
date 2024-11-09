@@ -1,5 +1,6 @@
 package store.domain.user;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ShoppingProduct {
@@ -7,11 +8,13 @@ public class ShoppingProduct {
     private final String name;
     private final int price;
     private int quantity;
+    private final LocalDate date;
 
     public ShoppingProduct(final String name, final int price, final int quantity) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.date = LocalDate.now();
     }
 
     void decreaseQuantity(int count) {
@@ -32,6 +35,10 @@ public class ShoppingProduct {
 
     public int getPrice() {
         return price;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     @Override
