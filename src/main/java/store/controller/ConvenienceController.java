@@ -2,11 +2,13 @@ package store.controller;
 
 import static store.domain.store.KioskStatus.ON;
 
+import java.util.List;
 import java.util.function.Supplier;
 import store.domain.store.Cashier;
 import store.domain.store.Convenience;
 import store.domain.store.KioskStatus;
 import store.domain.store.item.Items;
+import store.domain.store.item.PromotionItem;
 import store.domain.user.Customer;
 import store.domain.user.MemberShipType;
 import store.domain.user.ShoppingProducts;
@@ -42,7 +44,7 @@ public class ConvenienceController {
         retryTemplate(this::displayProduct);
         ShoppingProducts products = pickProductsToBuy();
         classifyProducts(products);
-        //checkPromotionPolicy();
+        checkPromotionPolicy();
         /*
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
         Receipt receipt = calculatePrice(receiveMembershipBenefit);
@@ -69,37 +71,42 @@ public class ConvenienceController {
         cashier.receiveAndClassifyItems(shoppingProducts);
     }
 
-    /*
 
     private void checkPromotionPolicy() {
-        for (ShoppingProduct shoppingProduct : shoppingProducts.getProducts()) {
-            if (convenience.isPromotionApplicableToday(shoppingProduct)) {
-                if (convenience.isPromotionNotApplicableToAllItems(shoppingProduct)) {
-                    handlePromotionStockShortage(shoppingProduct);
-                }
-                if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
-                    handleAdditionalBenefit(shoppingProduct);
-                }
-            }
+        manageWhenPromotionStockIsExceed();
+        manageUserPromotionItemShortage();
+    }
+
+    private void manageWhenPromotionStockIsExceed() {
+        List<PromotionItem> promotionItems = cashier.getExceedingPromotionItems();
+        for (PromotionItem promotionItem : promotionItems) {
+            handlePromotionStockShortage(promotionItem);
         }
     }
 
-    private void handlePromotionStockShortage(final ShoppingProduct shoppingProduct) {
-        int itemsWithoutPromotionCount = convenience.calculateItemCountWithoutPromotion(shoppingProduct);
+    private void handlePromotionStockShortage(final PromotionItem promotionItem) {
+        int itemsWithoutPromotionCount = convenience.calculateItemCountWithoutPromotion(promotionItem);
         UserResponse userResponse = retryTemplate(() ->
-                inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount)
+                inputView.askForPurchaseWithWarning(promotionItem.getName(), itemsWithoutPromotionCount)
         );
         if (userResponse == UserResponse.NO) {
-            customer.removeFromCart(shoppingProduct, itemsWithoutPromotionCount);
+            cashier.removePromotionItemFromCart(promotionItem, itemsWithoutPromotionCount);
         }
     }
 
-    private void handleAdditionalBenefit(final ShoppingProduct shoppingProduct) {
+    private void manageUserPromotionItemShortage() {
+        List<PromotionItem> promotionItems = cashier.getShortagePromotionItems();
+        for (PromotionItem promotionItem : promotionItems) {
+            handleAdditionalBenefit(promotionItem);
+        }
+    }
+
+    private void handleAdditionalBenefit(final PromotionItem promotionItem) {
         UserResponse userResponse = retryTemplate(() ->
-                inputView.askForBenefitWithAdditional(shoppingProduct.getName())
+                inputView.askForBenefitWithAdditional(promotionItem.getName())
         );
         if (userResponse == UserResponse.YES) {
-            customer.addCart(shoppingProduct);
+            cashier.addPromotionItemFromCart(promotionItem);
         }
     }
 

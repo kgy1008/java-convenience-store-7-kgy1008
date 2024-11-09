@@ -43,4 +43,12 @@ public class PromotionItem implements Item {
     public boolean isPromotionProduct() {
         return true;
     }
+
+    public void decreaseQuantity(final int count) {
+        quantity -= count;
+    }
+
+    public void increaseQuantity(final int count) {
+        quantity += count;
+    }
 }
