@@ -8,6 +8,7 @@ import store.domain.store.Convenience;
 import store.domain.store.KioskStatus;
 import store.domain.store.item.Items;
 import store.domain.user.Customer;
+import store.domain.user.MemberShipType;
 import store.domain.user.ShoppingProducts;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
@@ -26,7 +27,7 @@ public class ConvenienceController {
         this.outputView = new OutputView();
         this.convenience = new Convenience();
         this.cashier = new Cashier(convenience);
-        this.customer = new Customer();
+        this.customer = new Customer(MemberShipType.MEMBERSHIP_MEMBER);
     }
 
     public void run() {

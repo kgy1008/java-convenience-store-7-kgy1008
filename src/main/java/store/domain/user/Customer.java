@@ -4,15 +4,11 @@ public class Customer {
 
     private final MemberShipType memberShipType;
 
-    public Customer() {
-        memberShipType = setMemberShipType();
+    public Customer(final MemberShipType memberShipType) {
+        this.memberShipType = memberShipType;
     }
 
     public boolean hasMembership() {
         return this.memberShipType == MemberShipType.MEMBERSHIP_MEMBER;
-    }
-
-    private MemberShipType setMemberShipType() {
-        return MemberShipType.MEMBERSHIP_MEMBER;
     }
 }
