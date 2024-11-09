@@ -15,6 +15,16 @@ public class PromotionItem implements Item {
     }
 
     @Override
+    public void decreaseQuantity(final int count) {
+        quantity -= count;
+    }
+
+    @Override
+    public void increaseQuantity(final int count) {
+        quantity += count;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -42,13 +52,5 @@ public class PromotionItem implements Item {
     @Override
     public boolean isPromotionProduct() {
         return true;
-    }
-
-    public void decreaseQuantity(final int count) {
-        quantity -= count;
-    }
-
-    public void increaseQuantity(final int count) {
-        quantity += count;
     }
 }

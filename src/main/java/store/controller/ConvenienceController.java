@@ -39,6 +39,7 @@ public class ConvenienceController {
         KioskStatus kioskStatus = ON;
         while (kioskStatus == ON) {
             purchase();
+            updateItem();
             kioskStatus = askForBuyMore();
         }
     }
@@ -51,6 +52,10 @@ public class ConvenienceController {
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
         Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
         displayReceipt(receipt);
+    }
+
+    private void updateItem() {
+        cashier.finishPayment();
     }
 
     private void displayProduct() {
@@ -127,7 +132,6 @@ public class ConvenienceController {
         return true;
     }
 
-
     private Receipt calculatePurchaseAmount(final boolean hasMembershipBenefit) {
         return cashier.generateReceipt(hasMembershipBenefit);
     }
@@ -135,7 +139,6 @@ public class ConvenienceController {
     private void displayReceipt(final Receipt receipt) {
         outputView.printReceipt(receipt);
     }
-
 
     private KioskStatus askForBuyMore() {
         UserResponse userResponse = inputView.askForBuyMore();
