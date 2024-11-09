@@ -34,11 +34,11 @@ public class ConvenienceController {
         KioskStatus kioskStatus = ON;
         while (kioskStatus == ON) {
             purchase();
-
+            kioskStatus = askForBuyMore();
         }
     }
 
-    public void purchase() {
+    private void purchase() {
         retryHandler.retryTemplate(this::displayProduct);
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
@@ -113,5 +113,10 @@ public class ConvenienceController {
             throw new AppException(UNAUTHORIZED_EXCEPTION.getMessage());
         }
         return true;
+    }
+
+    private KioskStatus askForBuyMore() {
+        UserResponse userResponse = inputView.askForBuyMore();
+        return KioskStatus.turnOnOrOff(userResponse);
     }
 }
