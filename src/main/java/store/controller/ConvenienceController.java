@@ -7,6 +7,8 @@ import store.domain.store.Convenience;
 import store.domain.store.KioskStatus;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
+import store.domain.user.ShoppingProduct;
+import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
 import store.io.view.InputView;
 import store.io.view.OutputView;
@@ -28,20 +30,16 @@ public class ConvenienceController {
 
     public void run() {
         KioskStatus kioskStatus = ON;
-        displayProduct();
-        /*
         while (kioskStatus == ON) {
             purchase();
-            // kioskStatus = askForBuyMore();
+            kioskStatus = askForBuyMore();
         }
-        *
-         */
     }
 
     private void purchase() {
         retryHandler.retryTemplate(this::displayProduct);
-        /*
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
+         /*
         checkPromotionPolicy(shoppingProducts);
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
         Receipt receipt = calculatePrice(receiveMembershipBenefit);
@@ -57,14 +55,15 @@ public class ConvenienceController {
         ItemStatus itemStatus = new ItemStatus(items);
         outputView.printProducts(itemStatus);
     }
-        /*
+
 
     private List<ShoppingProduct> tryToBuy() {
         String shoppingItems = retryHandler.retryTemplate(inputView::inputShoppingItems);
-        List<ShoppingProduct> shoppingProducts = convenience.checkPurchaseItems(shoppingItems);
+        List<ShoppingProduct> shoppingProducts = convenience.getShoppingItemsFromUser(shoppingItems);
         customer.purchase(shoppingProducts);
         return shoppingProducts;
     }
+      /*
 
     private void checkPromotionPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
@@ -123,12 +122,11 @@ public class ConvenienceController {
     private void displayReceipt(final Receipt receipt) {
         outputView.printReceipt(receipt);
     }
+     */
 
     private KioskStatus askForBuyMore() {
         UserResponse userResponse = inputView.askForBuyMore();
         customer.finishShopping();
         return KioskStatus.turnOnOrOff(userResponse);
     }
-
-     */
 }

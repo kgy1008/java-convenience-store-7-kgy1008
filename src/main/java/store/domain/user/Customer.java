@@ -15,7 +15,7 @@ public class Customer {
         memberShipType = setMemberShipType();
     }
 
-    public void purchase(List<ShoppingProduct> shoppingProducts) {
+    public void purchase(final List<ShoppingProduct> shoppingProducts) {
         cart.addAll(shoppingProducts);
     }
 

@@ -33,4 +33,9 @@ public class PromotionItem implements Item {
     public int getQuantity() {
         return quantity;
     }
+
+    @Override
+    public boolean isEqual(final String name) {
+        return this.name.equals(name);
+    }
 }

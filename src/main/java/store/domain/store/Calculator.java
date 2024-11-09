@@ -1,13 +1,7 @@
 package store.domain.store;
 
-import java.util.ArrayList;
-import java.util.List;
-import store.domain.user.ShoppingProduct;
-import store.dto.Gift;
-import store.dto.Receipt;
-
 public class Calculator {
-
+/*
     private static final int NO_MEMBERSHIP_DISCOUNT = 0;
     private static final int MAX_MEMBERSHIP_DISCOUNT = 8000;
     private static final double MEMBERSHIP_DISCOUNT_RATE = 0.3;
@@ -64,4 +58,6 @@ public class Calculator {
                 .mapToInt(ShoppingProduct::getQuantity)
                 .sum();
     }
+
+ */
 }

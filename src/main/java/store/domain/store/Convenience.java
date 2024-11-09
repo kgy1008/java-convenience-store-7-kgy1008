@@ -4,6 +4,8 @@ import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
+import store.domain.store.util.ProductFormatter;
+import store.domain.user.ShoppingProduct;
 
 public class Convenience {
 
@@ -18,12 +20,11 @@ public class Convenience {
         this.items = initializer.initItems();
     }
 
-    /*
-
-    public List<ShoppingProduct> checkPurchaseItems(final String input) {
+    public List<ShoppingProduct> getShoppingItemsFromUser(final String input) {
         ProductFormatter productFormatter = new ProductFormatter();
         return productFormatter.convertStringToItem(input, items);
     }
+    /*
 
     public boolean isPromotionNotApplicableToAllItems(final ShoppingProduct shoppingProduct) {
         return calculateMaxCountOfPromotionItemsAvailable(shoppingProduct) < shoppingProduct.getQuantity();

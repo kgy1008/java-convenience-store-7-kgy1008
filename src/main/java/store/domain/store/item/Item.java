@@ -9,4 +9,6 @@ public interface Item {
     String getPromotionName();
 
     int getQuantity();
+
+    boolean isEqual(String name);
 }
