@@ -11,7 +11,7 @@ public class OutputView {
     private static final String NEW_LINE = System.lineSeparator();
 
     public void printWelcomeMessage() {
-        System.out.println(WELCOME_MESSAGE);
+        System.out.println(NEW_LINE + WELCOME_MESSAGE);
     }
 
     public void printProducts(ItemStatus itemStatus) {
