@@ -38,4 +38,8 @@ public class Customer {
     private MemberShipType setMemberShipType() {
         return MemberShipType.MEMBERSHIP_MEMBER;
     }
+
+    public void finishShopping() {
+        cart.clear();
+    }
 }
