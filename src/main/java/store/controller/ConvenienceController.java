@@ -27,7 +27,7 @@ public class ConvenienceController {
     public void start() {
         retryTemplate(this::displayProduct);
         List<ShoppingProduct> shoppingProducts = retryTemplate(this::tryToBuy);
-        checkDiscountPolicy(shoppingProducts);
+        checkPromotionPolicy(shoppingProducts);
     }
 
     private void displayProduct() {
@@ -44,7 +44,7 @@ public class ConvenienceController {
         return shoppingProducts;
     }
 
-    private void checkDiscountPolicy(final List<ShoppingProduct> shoppingProducts) {
+    private void checkPromotionPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
             if (isPromotionStockExceeded(shoppingProduct)) {
                 handlePromotionStockWarning(shoppingProduct);
