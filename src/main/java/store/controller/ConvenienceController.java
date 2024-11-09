@@ -1,7 +1,6 @@
 package store.controller;
 
 import java.util.List;
-import java.util.function.Supplier;
 import store.domain.store.Convenience;
 import store.domain.store.item.Item;
 import store.domain.user.Customer;
@@ -14,19 +13,21 @@ import store.io.view.OutputView;
 public class ConvenienceController {
     private final InputView inputView;
     private final OutputView outputView;
+    private final RetryHandler retryHandler;
     private final Convenience convenience;
     private final Customer customer;
 
     public ConvenienceController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
+        this.retryHandler = new RetryHandler(outputView);
         this.convenience = new Convenience();
         this.customer = new Customer();
     }
 
     public void start() {
-        retryTemplate(this::displayProduct);
-        List<ShoppingProduct> shoppingProducts = retryTemplate(this::tryToBuy);
+        retryHandler.retryTemplate(this::displayProduct);
+        List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
     }
 
@@ -38,7 +39,7 @@ public class ConvenienceController {
     }
 
     private List<ShoppingProduct> tryToBuy() {
-        String shoppingItems = retryTemplate(inputView::inputShoppingItems);
+        String shoppingItems = retryHandler.retryTemplate(inputView::inputShoppingItems);
         List<ShoppingProduct> shoppingProducts = convenience.checkPurchaseItems(shoppingItems);
         customer.purchase(shoppingProducts);
         return shoppingProducts;
@@ -66,7 +67,7 @@ public class ConvenienceController {
 
     private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
         int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
-        UserResponse userResponse = retryTemplate(() -> {
+        UserResponse userResponse = retryHandler.retryTemplate(() -> {
             String answer = inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount);
             return UserResponse.from(answer);
         });
@@ -77,34 +78,13 @@ public class ConvenienceController {
     }
 
     private void handleAdditionalBenefit(final ShoppingProduct shoppingProduct) {
-        UserResponse userResponse = retryTemplate(() -> {
+        UserResponse userResponse = retryHandler.retryTemplate(() -> {
             String answer = inputView.askForBenefitWithAdditional(shoppingProduct.getName());
             return UserResponse.from(answer);
         });
 
         if (userResponse == UserResponse.YES) {
             customer.addCart(shoppingProduct);
-        }
-    }
-
-    private <T> T retryTemplate(final Supplier<T> action) {
-        while (true) {
-            try {
-                return action.get();
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
-        }
-    }
-
-    private void retryTemplate(final Runnable action) {
-        while (true) {
-            try {
-                action.run();
-                break;
-            } catch (IllegalArgumentException e) {
-                outputView.printErrorMessage(e.getMessage());
-            }
         }
     }
 }
