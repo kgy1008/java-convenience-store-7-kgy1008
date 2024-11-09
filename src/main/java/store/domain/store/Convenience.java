@@ -3,12 +3,7 @@ package store.domain.store;
 import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
-import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
-import store.domain.store.util.ProductFormatter;
-import store.domain.user.ShoppingProduct;
-import store.dto.Gift;
-import store.dto.Receipt;
 
 public class Convenience {
 
@@ -22,6 +17,8 @@ public class Convenience {
         this.promotions = initializer.initPromotions();
         this.items = initializer.initItems();
     }
+
+    /*
 
     public List<ShoppingProduct> checkPurchaseItems(final String input) {
         ProductFormatter productFormatter = new ProductFormatter();
@@ -75,10 +72,14 @@ public class Convenience {
         return false;
     }
 
+
+     */
+
     public List<Item> getItems() {
         return items.getItems();
     }
 
+    /*
     private int calculateMaxCountOfPromotionItemsAvailable(final ShoppingProduct shoppingProduct) {
         int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
         int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
@@ -94,4 +95,7 @@ public class Convenience {
         int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
         return shoppingProduct.getQuantity() % promotionGroupSize != EXACT_MATCH;
     }
+
+
+     */
 }
