@@ -47,6 +47,14 @@ class ProductFormatterTest {
     }
 
     @ParameterizedTest
+    @DisplayName("유효하지 않는 수량이 입력값으로 들어올 경우, 예외 발생")
+    @ValueSource(strings = {"[콜라-0]", "[콜라--1]", "[콜라-s]"})
+    void validateNotPositiveQuantity(final String input) {
+        assertThatThrownBy(() -> productFormatter.convertStringToItem(input, items))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest
     @DisplayName("정상 입력 테스트")
     @ValueSource(strings = {"[콜라-15]", "[새우깡-15]", "[콜라-15],[새우깡-15]"})
     void validShoppingItem(final String input) {
