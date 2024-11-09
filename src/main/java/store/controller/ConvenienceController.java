@@ -18,15 +18,15 @@ public class ConvenienceController {
     private final InputView inputView;
     private final OutputView outputView;
     private final Convenience convenience;
-    private final Customer customer;
     private final Cashier cashier;
+    private final Customer customer;
 
     public ConvenienceController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
         this.convenience = new Convenience();
+        this.cashier = new Cashier(convenience);
         this.customer = new Customer();
-        this.cashier = new Cashier();
     }
 
     public void run() {
@@ -65,7 +65,7 @@ public class ConvenienceController {
     }
 
     private void classifyProducts(final ShoppingProducts shoppingProducts) {
-        cashier.receiveAndClassifyItems(shoppingProducts, convenience);
+        cashier.receiveAndClassifyItems(shoppingProducts);
     }
 
     /*

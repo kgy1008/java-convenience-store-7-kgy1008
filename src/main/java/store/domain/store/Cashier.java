@@ -11,17 +11,19 @@ import store.domain.user.ShoppingProducts;
 
 public class Cashier {
 
+    private final Convenience convenience;
     private final List<PromotionItem> promotions;
     private final List<BasicItem> basicItems;
     private final Calculator calculator;
 
-    public Cashier() {
+    public Cashier(final Convenience convenience) {
+        this.convenience = convenience;
         this.promotions = new ArrayList<>();
         this.basicItems = new ArrayList<>();
         this.calculator = new Calculator();
     }
 
-    public void receiveAndClassifyItems(final ShoppingProducts shoppingProducts, final Convenience convenience) {
+    public void receiveAndClassifyItems(final ShoppingProducts shoppingProducts) {
         Items items = convenience.getItems();
         for (ShoppingProduct shoppingProduct : shoppingProducts.getProducts()) {
             String name = shoppingProduct.getName();
