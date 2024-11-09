@@ -1,6 +1,7 @@
 package store.domain.store;
 
 import java.util.List;
+import store.domain.store.config.Initializer;
 import store.domain.store.item.BasicItem;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;

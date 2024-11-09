@@ -1,4 +1,4 @@
-package store.domain.store;
+package store.domain.store.config;
 
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
@@ -9,16 +9,16 @@ public class Initializer {
     private final ProductFileReader productFileReader;
     private final PromotionFileReader promotionFileReader;
 
-    Initializer() {
+    public Initializer() {
         this.productFileReader = new ProductFileReader();
         this.promotionFileReader = new PromotionFileReader();
     }
 
-    Promotions initPromotions() {
+    public Promotions initPromotions() {
         return promotionFileReader.getPromotions();
     }
 
-    Items initItems() {
+    public Items initItems() {
         return productFileReader.getItems();
     }
 }
