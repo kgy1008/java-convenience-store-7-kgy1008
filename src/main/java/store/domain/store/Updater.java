@@ -5,11 +5,11 @@ import store.domain.store.promotion.Promotions;
 import store.io.provider.ProductFileReader;
 import store.io.provider.PromotionFileReader;
 
-public class StoreUpdater {
+public class Updater {
     private final ProductFileReader productFileReader;
     private final PromotionFileReader promotionFileReader;
 
-    StoreUpdater() {
+    Updater() {
         this.productFileReader = new ProductFileReader();
         this.promotionFileReader = new PromotionFileReader();
     }

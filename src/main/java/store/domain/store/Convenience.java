@@ -10,14 +10,14 @@ import store.domain.user.ShoppingProduct;
 public class Convenience {
 
     private static final int EXACT_MATCH = 0;
-    private final StoreUpdater initializer;
+    private final Updater updater;
     private final Promotions promotions;
     private final Items items;
 
     public Convenience() {
-        this.initializer = new StoreUpdater();
-        this.promotions = initializer.updatePromotions();
-        this.items = initializer.updateItems();
+        this.updater = new Updater();
+        this.promotions = updater.updatePromotions();
+        this.items = updater.updateItems();
     }
 
     public List<ShoppingProduct> checkPurchaseItems(final String input) {

@@ -43,6 +43,7 @@ public class ConvenienceController {
         List<ShoppingProduct> shoppingProducts = retryHandler.retryTemplate(this::tryToBuy);
         checkPromotionPolicy(shoppingProducts);
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
+        
     }
 
     private void displayProduct() {
