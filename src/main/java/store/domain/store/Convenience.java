@@ -49,7 +49,7 @@ public class Convenience {
     private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
         return shoppingProducts.stream()
                 .filter(product -> items.isExistPromotionProduct(product.getName()))
-                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product)))
+                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product), product.getPrice()))
                 .toList();
     }
 
