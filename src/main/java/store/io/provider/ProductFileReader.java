@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import store.common.exception.AppException;
 import store.common.exception.FileReadException;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
@@ -45,7 +44,7 @@ public class ProductFileReader {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new AppException(INVALID_FORMAT.getMessage());
+            throw new FileReadException(INVALID_FORMAT.getMessage(), e);
         }
     }
 

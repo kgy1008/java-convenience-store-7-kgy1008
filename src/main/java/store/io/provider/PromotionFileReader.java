@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import store.common.exception.AppException;
 import store.common.exception.FileReadException;
 import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.PromotionType;
@@ -54,7 +53,7 @@ public class PromotionFileReader {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new AppException(INVALID_FORMAT.getMessage());
+            throw new FileReadException(INVALID_FORMAT.getMessage(), e);
         }
     }
 }
