@@ -1,6 +1,7 @@
 package store.io.view;
 
 import static store.common.ErrorMessage.INVALID_FORMAT;
+import static store.common.ErrorMessage.INVALID_INPUT;
 
 import camp.nextstep.edu.missionutils.Console;
 import store.common.exception.AppException;
@@ -36,9 +37,16 @@ public class InputView {
     }
 
     private void validate(final String input) {
+        validateBlank(input);
         String[] items = input.split(DELIMITER);
         for (String item : items) {
             validateFormat(item);
+        }
+    }
+    
+    private void validateBlank(final String input) {
+        if (input == null || input.isBlank()) {
+            throw new AppException(INVALID_INPUT.getMessage());
         }
     }
 
