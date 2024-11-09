@@ -32,7 +32,6 @@ public class ProductFileReader {
     private List<Item> readAllItems() throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(PRODUCT_FILE_PATH));
         List<Item> items = new ArrayList<>();
-
         for (String line : lines.stream().skip(HEADER_LINE).toList()) {
             items.add(parseItem(line));
         }
@@ -65,13 +64,11 @@ public class ProductFileReader {
 
     private List<Item> addMissingBaseItems(List<Item> allItems) {
         List<Item> itemsWithBaseItems = new ArrayList<>(allItems);
-
         for (Item item : allItems) {
             if (isPromotionalItem(item) && !hasBaseItem(allItems, item)) {
                 itemsWithBaseItems.add(createBaseItem(item));
             }
         }
-
         return itemsWithBaseItems;
     }
 
