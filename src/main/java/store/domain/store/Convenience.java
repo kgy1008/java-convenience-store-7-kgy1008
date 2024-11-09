@@ -1,12 +1,13 @@
 package store.domain.store;
 
 import java.util.List;
-import java.util.Optional;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.promotion.Promotions;
+import store.domain.store.util.CartItemFormatter;
 import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
+import store.dto.Gift;
 
 public class Convenience {
 
@@ -36,14 +37,41 @@ public class Convenience {
 
     public int calculateItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
         int inputQuantity = shoppingProduct.getQuantity();
+        int promotionItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
+        return inputQuantity - promotionItemsAvailableSize;
+    }
 
-        int promoItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
-        return inputQuantity - promoItemsAvailableSize;
+    public void calculatePrice(final List<ShoppingProduct> shoppingProducts, final boolean hasMembershipBenefit) {
+        List<CalculableItem> calculableItems = formatItemsForCalculation(shoppingProducts);
+        List<Gift> gifts = getGifts(shoppingProducts);
+        Calculator calculator = new Calculator(calculableItems, gifts);
+        calculator.calculatePrice(items, hasMembershipBenefit);
+    }
+
+    private List<CalculableItem> formatItemsForCalculation(final List<ShoppingProduct> shoppingProducts) {
+        CartItemFormatter cartItemFormatter = new CartItemFormatter();
+        return cartItemFormatter.convertToCalculableItem(shoppingProducts, items);
+    }
+
+    private List<Gift> getGifts(final List<ShoppingProduct> shoppingProducts) {
+        return shoppingProducts.stream()
+                .filter(product -> items.isExistPromotionProduct(product.getName()))
+                .map(product -> new Gift(product.getName(), calculateNumberOfGift(product)))
+                .toList();
+    }
+
+    private int calculateNumberOfGift(final ShoppingProduct shoppingProduct) {
+        int promotionItemsAvailableSize = calculateMaxCountOfPromotionItemsAvailable(shoppingProduct);
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
+        int maxStockBasedPromotionApplied = promotionItemsAvailableSize / promotionGroupSize;
+
+        int inputPromotionAppliedCount = shoppingProduct.getQuantity() / promotionGroupSize;
+
+        return Math.min(maxStockBasedPromotionApplied, inputPromotionAppliedCount);
     }
 
     public boolean isPromotionProduct(final ShoppingProduct shoppingProduct) {
-        Optional<Item> item = items.findPromotionItemByName(shoppingProduct.getName());
-        return item.isPresent();
+        return items.isExistPromotionProduct(shoppingProduct.getName());
     }
 
     public List<Item> getItems() {

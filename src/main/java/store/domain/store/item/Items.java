@@ -49,7 +49,16 @@ public class Items {
                 .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
     }
 
-    public Optional<Item> findPromotionItemByName(final String name) {
+    public boolean isExistPromotionProduct(final String name) {
+        Optional<Item> item = findPromotionItemByName(name);
+        return item.isPresent();
+    }
+
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
+    }
+    
+    private Optional<Item> findPromotionItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.findPromotionItemByName(name))
                 .findFirst();
@@ -57,9 +66,5 @@ public class Items {
 
     private Promotion findPromotionByName(final String name, final Promotions promotions) {
         return promotions.findPromotionByName(name);
-    }
-
-    public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
     }
 }
