@@ -2,7 +2,7 @@ package store.domain.store.promotion;
 
 import java.time.LocalDate;
 
-public class Promotion implements DiscountPolicy {
+public class Promotion {
 
     private final String name;
     private final PromotionType promotionType;
@@ -20,13 +20,7 @@ public class Promotion implements DiscountPolicy {
         return this.name.equals(name);
     }
 
-    @Override
     public int getPromotionBundleSize() {
         return PromotionType.getPromotionBundleSize(promotionType);
-    }
-
-    @Override
-    public String getPolicyName() {
-        return name;
     }
 }

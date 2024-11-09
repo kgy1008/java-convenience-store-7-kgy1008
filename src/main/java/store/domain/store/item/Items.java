@@ -5,6 +5,8 @@ import static store.common.ErrorMessage.INVALID_INPUT;
 import java.util.Collections;
 import java.util.List;
 import store.common.exception.AppException;
+import store.domain.store.promotion.Promotion;
+import store.domain.store.promotion.Promotions;
 
 public class Items {
     private final List<Item> items;
@@ -30,9 +32,11 @@ public class Items {
         return item.getQuantity();
     }
 
-    public int getPromotionBundleSize(final String name) {
+    public int getPromotionBundleSize(final String name, final Promotions promotions) {
         Item item = findPromotionItemByName(name);
-        return item.getPromotionBundleSize();
+        String promotionName = item.getPromotionName();
+        Promotion promotion = findPromotionByName(promotionName, promotions);
+        return promotion.getPromotionBundleSize();
     }
 
     private Item findPromotionItemByName(final String name) {
@@ -40,6 +44,10 @@ public class Items {
                 .filter(item -> item.findPromotionItemByName(name))
                 .findFirst()
                 .orElseThrow(() -> new AppException(INVALID_INPUT.getMessage()));
+    }
+
+    private Promotion findPromotionByName(final String name, final Promotions promotions) {
+        return promotions.findPromotionByName(name);
     }
 
     public List<Item> getItems() {

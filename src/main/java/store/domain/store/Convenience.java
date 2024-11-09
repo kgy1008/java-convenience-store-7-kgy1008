@@ -10,14 +10,14 @@ import store.domain.user.ShoppingProduct;
 public class Convenience {
 
     private static final int EXACT_MATCH = 0;
-    private final StoreInitializer initializer;
+    private final StoreUpdater initializer;
     private final Promotions promotions;
     private final Items items;
 
     public Convenience() {
-        this.initializer = new StoreInitializer();
-        this.promotions = initializer.initPromotions();
-        this.items = initializer.initItems(promotions);
+        this.initializer = new StoreUpdater();
+        this.promotions = initializer.updatePromotions();
+        this.items = initializer.updateItems();
     }
 
     public List<Item> getItems() {
@@ -42,15 +42,17 @@ public class Convenience {
     }
 
     private boolean isLessThanPromotionStandard(final ShoppingProduct shoppingProduct) {
-        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName());
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
         return shoppingProduct.getQuantity() % promotionGroupSize != EXACT_MATCH;
     }
 
     public int getItemCountWithoutPromotion(final ShoppingProduct shoppingProduct) {
         int remainingStock = items.checkRemainingPromotionStock(shoppingProduct.getName());
-        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName());
-        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
         int inputQuantity = shoppingProduct.getQuantity();
+
+        int promotionGroupSize = items.getPromotionBundleSize(shoppingProduct.getName(), promotions);
+        int fullPromotionGroupCount = remainingStock / promotionGroupSize;
+
         return inputQuantity - (fullPromotionGroupCount * promotionGroupSize);
     }
 }

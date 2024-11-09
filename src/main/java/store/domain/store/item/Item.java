@@ -1,6 +1,8 @@
 package store.domain.store.item;
 
 public class Item {
+
+    private final String NO_PROMOTION = "";
     private final String name;
     private final int price;
     private final String promotionName;
@@ -11,6 +13,10 @@ public class Item {
         this.price = price;
         this.quantity = quantity;
         this.promotionName = promotionName;
+    }
+
+    public boolean findPromotionItemByName(final String name) {
+        return this.name.equals(name) && isPromotionItem();
     }
 
     boolean isEqual(final String name) {
@@ -31,5 +37,9 @@ public class Item {
 
     public String getPromotionName() {
         return promotionName;
+    }
+
+    private boolean isPromotionItem() {
+        return !(this.promotionName.equals(NO_PROMOTION));
     }
 }
