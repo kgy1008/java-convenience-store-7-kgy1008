@@ -1,6 +1,8 @@
 package store.domain.store;
 
 import java.util.List;
+import store.domain.store.item.BasicItem;
+import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.store.promotion.Promotion;
@@ -80,6 +82,25 @@ public class Convenience {
 
     int findPromotionBundleSizee(final PromotionItem promotionItem) {
         return items.getPromotionBundleSize(promotionItem.getName(), promotions);
+    }
+
+    void updateItemQuantity(final List<PromotionItem> selledPromotionItems, final List<BasicItem> selledBasicItems) {
+        updatePromotionItemQuantity(selledPromotionItems);
+        updateBasicItemQuantity(selledBasicItems);
+    }
+
+    private void updatePromotionItemQuantity(final List<PromotionItem> selledPromotionItems) {
+        for (PromotionItem selledPromotionItem : selledPromotionItems) {
+            Item promotionItem = items.findItemByName(selledPromotionItem.getName());
+            promotionItem.decreaseQuantity(selledPromotionItem.getQuantity());
+        }
+    }
+
+    private void updateBasicItemQuantity(final List<BasicItem> selledBasicItems) {
+        for (BasicItem selledBasicItem : selledBasicItems) {
+            Item basicItem = items.findItemByName(selledBasicItem.getName());
+            basicItem.decreaseQuantity(selledBasicItem.getQuantity());
+        }
     }
 
     public Items getItems() {

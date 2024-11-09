@@ -14,4 +14,7 @@ public interface Item {
 
     boolean isPromotionProduct();
 
+    void decreaseQuantity(final int quantity);
+
+    void increaseQuantity(final int count);
 }

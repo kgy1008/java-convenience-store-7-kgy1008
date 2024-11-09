@@ -92,4 +92,10 @@ public class Cashier {
                         convenience.findPromotionBundleSizee(product)))
                 .toList();
     }
+
+    public void finishPayment() {
+        convenience.updateItemQuantity(promotionItems, basicItems);
+        promotionItems.clear();
+        basicItems.clear();
+    }
 }

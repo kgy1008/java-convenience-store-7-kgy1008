@@ -13,7 +13,18 @@ public class BasicItem implements Item {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+
         this.promotionName = NO_PROMOTION;
+    }
+
+    @Override
+    public void decreaseQuantity(final int count) {
+        quantity -= count;
+    }
+
+    @Override
+    public void increaseQuantity(final int count) {
+        quantity += count;
     }
 
     @Override
