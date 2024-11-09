@@ -54,10 +54,16 @@ public class Items {
         return item.isPresent();
     }
 
+    public String findPromotionNameOfItem(final String name) {
+        Item item = findPromotionItemByName(name)
+                .orElseThrow(() -> new AppException(NOT_FOUND.getMessage()));
+        return item.getPromotionName();
+    }
+
     public List<Item> getItems() {
         return Collections.unmodifiableList(items);
     }
-    
+
     private Optional<Item> findPromotionItemByName(final String name) {
         return items.stream()
                 .filter(item -> item.findPromotionItemByName(name))

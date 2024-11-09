@@ -1,8 +1,10 @@
 package store.domain.store;
 
+import java.time.LocalDate;
 import java.util.List;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
+import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
 import store.domain.store.util.ProductFormatter;
 import store.domain.user.ShoppingProduct;
@@ -66,7 +68,16 @@ public class Convenience {
     }
 
     public boolean isPromotionProduct(final ShoppingProduct shoppingProduct) {
-        return items.isExistPromotionProduct(shoppingProduct.getName());
+        LocalDate nowDate = LocalDate.now();
+        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
+            String promotionName = items.findPromotionNameOfItem(shoppingProduct.getName());
+            Promotion promotion = promotions.findPromotionByName(promotionName);
+            if (promotion.isBetweenPromotionDuration(nowDate)) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     public List<Item> getItems() {
