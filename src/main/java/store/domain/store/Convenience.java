@@ -93,15 +93,22 @@ public class Convenience {
         for (PromotionItem soldPromotionItem : soldPromotionItems) {
             List<Item> items = this.items.findItemsByName(soldPromotionItem.getName());
             Item promotionItem = items.getFirst();
-            if (promotionItem.getQuantity() < soldPromotionItem.getQuantity()) {
-                int remainSoldQuantity = soldPromotionItem.getQuantity() - promotionItem.getQuantity();
-                promotionItem.decreaseQuantity(promotionItem.getQuantity());
-                Item basicItem = items.getLast();
-                basicItem.decreaseQuantity(remainSoldQuantity);
+            if (isPromotionStockInsufficient(promotionItem, soldPromotionItem)) {
+                handleInsufficientQuantity(promotionItem, items.getLast(), soldPromotionItem.getQuantity());
                 continue;
             }
             promotionItem.decreaseQuantity(soldPromotionItem.getQuantity());
         }
+    }
+
+    private boolean isPromotionStockInsufficient(final Item promotionItem, final PromotionItem soldPromotionItem) {
+        return promotionItem.getQuantity() < soldPromotionItem.getQuantity();
+    }
+
+    private void handleInsufficientQuantity(final Item promotionItem, final Item basicItem, final int soldQuantity) {
+        int remainSoldQuantity = soldQuantity - promotionItem.getQuantity();
+        promotionItem.decreaseQuantity(promotionItem.getQuantity());
+        basicItem.decreaseQuantity(remainSoldQuantity);
     }
 
     private void updateBasicItemQuantity(final List<BasicItem> soldBasicItems) {
