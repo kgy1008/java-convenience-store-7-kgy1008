@@ -5,6 +5,7 @@ import static store.common.ErrorMessage.INVALID_INPUT;
 
 import camp.nextstep.edu.missionutils.Console;
 import store.common.exception.AppException;
+import store.domain.user.UserResponse;
 
 public class InputView {
 
@@ -13,6 +14,7 @@ public class InputView {
     private static final String PROMOTION_WARNING_MESSAGE = "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)%s";
     private static final String PROMOTION_BENEFIT_MESSAGE = "현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)%s";
     private static final String MEMBERSHIP_INFORMATION_MESSAGE = "멤버십 할인을 받으시겠습니까? (Y/N)";
+    private static final String TRY_AGAIN_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
     private static final String DELIMITER = ",";
     private static final String PREFIX = "[";
     private static final String SUFFIX = "]";
@@ -25,21 +27,30 @@ public class InputView {
         return input;
     }
 
-    public String askForPurchaseWithWarning(final String name, final int quantity) {
+    public UserResponse askForPurchaseWithWarning(final String name, final int quantity) {
         System.out.print(NEW_LINE);
         System.out.printf(PROMOTION_WARNING_MESSAGE, name, quantity, NEW_LINE);
-        return Console.readLine();
+        String input = Console.readLine();
+        return UserResponse.from(input);
     }
 
-    public String askForBenefitWithAdditional(final String name) {
+    public UserResponse askForBenefitWithAdditional(final String name) {
         System.out.print(NEW_LINE);
         System.out.printf(PROMOTION_BENEFIT_MESSAGE, name, NEW_LINE);
-        return Console.readLine();
+        String input = Console.readLine();
+        return UserResponse.from(input);
     }
 
-    public String askForGetMembershipBenefit() {
+    public UserResponse askForGetMembershipBenefit() {
         System.out.println(NEW_LINE + MEMBERSHIP_INFORMATION_MESSAGE);
-        return Console.readLine();
+        String input = Console.readLine();
+        return UserResponse.from(input);
+    }
+
+    public UserResponse askForBuyMore() {
+        System.out.println(NEW_LINE + TRY_AGAIN_MESSAGE);
+        String input = Console.readLine();
+        return UserResponse.from(input);
     }
 
     private void validate(final String input) {
