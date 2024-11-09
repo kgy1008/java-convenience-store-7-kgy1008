@@ -62,7 +62,7 @@ public class ConvenienceController {
     private void checkPromotionPolicy(final List<ShoppingProduct> shoppingProducts) {
         for (ShoppingProduct shoppingProduct : shoppingProducts) {
             if (convenience.isGreaterThanPromotionRemaingStock(shoppingProduct)) {
-                handlePromotionStockWarning(shoppingProduct);
+                handlePromotionStockShortage(shoppingProduct);
             }
             if (convenience.canReceiveAdditionalBenefit(shoppingProduct)) {
                 handleAdditionalBenefit(shoppingProduct);
@@ -70,7 +70,7 @@ public class ConvenienceController {
         }
     }
 
-    private void handlePromotionStockWarning(final ShoppingProduct shoppingProduct) {
+    private void handlePromotionStockShortage(final ShoppingProduct shoppingProduct) {
         int itemsWithoutPromotionCount = convenience.getItemCountWithoutPromotion(shoppingProduct);
         UserResponse userResponse = retryHandler.retryTemplate(() ->
                 inputView.askForPurchaseWithWarning(shoppingProduct.getName(), itemsWithoutPromotionCount)
