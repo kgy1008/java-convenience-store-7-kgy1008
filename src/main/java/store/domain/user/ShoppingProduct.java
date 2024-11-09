@@ -16,7 +16,7 @@ public class ShoppingProduct {
         this.quantity -= count;
     }
 
-    public void increaseQuantity(int count) {
+    void increaseQuantity(int count) {
         this.quantity += count;
     }
 
