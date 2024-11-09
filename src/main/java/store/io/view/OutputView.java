@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import store.dto.ItemStatus;
 import store.dto.Receipt;
+import store.io.view.util.ReceiptFormatter;
 
 public class OutputView {
 
@@ -29,7 +30,6 @@ public class OutputView {
         ReceiptFormatter receiptFormatter = new ReceiptFormatter();
         receiptFormatter.printReceipt(receipt);
     }
-
 
     public void printErrorMessage(final String message) {
         System.out.println(message);
