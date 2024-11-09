@@ -1,9 +1,11 @@
 package store.controller;
 
+import static store.common.ErrorMessage.UNAUTHORIZED_EXCEPTION;
 import static store.domain.store.KioskStatus.ON;
 
 import java.util.List;
 import java.util.function.Supplier;
+import store.common.exception.AppException;
 import store.domain.store.Cashier;
 import store.domain.store.Convenience;
 import store.domain.store.KioskStatus;
@@ -45,8 +47,8 @@ public class ConvenienceController {
         ShoppingProducts products = pickProductsToBuy();
         classifyProducts(products);
         checkPromotionPolicy();
-        /*
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
+        /*
         Receipt receipt = calculatePrice(receiveMembershipBenefit);
         displayReceipt(receipt);
 
@@ -110,9 +112,8 @@ public class ConvenienceController {
         }
     }
 
-    /*
     private boolean checkMemberShipBenefit() {
-        return retryHandler.retryTemplate(() -> {
+        return retryTemplate(() -> {
             UserResponse userResponse = inputView.askForGetMembershipBenefit();
             if (userResponse == UserResponse.YES) {
                 return verifyMembership();
@@ -128,6 +129,7 @@ public class ConvenienceController {
         return true;
     }
 
+        /*
     private Receipt calculatePrice(final boolean hasMembershipBenefit) {
         List<ShoppingProduct> shoppingProducts = customer.getCart();
         return convenience.generateReceipt(shoppingProducts, hasMembershipBenefit);
