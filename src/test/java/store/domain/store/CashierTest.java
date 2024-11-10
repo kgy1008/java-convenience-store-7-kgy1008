@@ -18,8 +18,7 @@ class CashierTest {
 
     private void setUp(final String input) {
         // given
-        List<ShoppingItem> shoppingItems = itemFormatter
-                .convertStringToItem(input, convenience.getItems());
+        List<ShoppingItem> shoppingItems = itemFormatter.convertStringToItem(input, convenience.getItems());
         ShoppingItems products = new ShoppingItems(shoppingItems);
 
         cashier.receiveAndClassifyItems(products);
@@ -56,8 +55,21 @@ class CashierTest {
     }
 
     @Test
-    @DisplayName("장바구니에서 올바르게 제거되었는지 테스트")
-    void removePromotionItemFromCart() {
+    @DisplayName("장바구니에 올바르게 추가되었는지 테스트")
+    void addPromotionItemFromCart() {
+        // given
+        setUp("[콜라-2],[에너지바-5]");
+        // when
+        List<PromotionItem> promotionItems = cashier.getShortagePromotionItems();
+        PromotionItem promotionItem = promotionItems.getFirst();
+        cashier.addPromotionItemFromCart(promotionItem);
+        // then
+        assertThat(promotionItem.getQuantity()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("장바구니에서 들어온 개수만큼 올바르게 제거되었는지 테스트")
+    void removePromotionItemCountFromCart() {
         // given
         setUp("[콜라-11],[물-1]");
         // when
@@ -69,16 +81,14 @@ class CashierTest {
     }
 
     @Test
-    @DisplayName("장바구니에 올바르게 추가되었는지 테스트")
-    void addPromotionItemFromCart() {
+    @DisplayName("장바구니가 비어있는지 않은지 확인 테스트")
+    void checkCartIsEmpty() {
         // given
-        setUp("[콜라-2],[에너지바-5]");
+        setUp("[컵라면-1]");
         // when
-        List<PromotionItem> promotionItems = cashier.getShortagePromotionItems();
-        PromotionItem promotionItem = promotionItems.getFirst();
-        cashier.addPromotionItemFromCart(promotionItem);
+        boolean result = cashier.isCartNotEmpty();
         // then
-        assertThat(promotionItem.getQuantity()).isEqualTo(3);
+        assertThat(result).isTrue();
     }
 
     @Test
