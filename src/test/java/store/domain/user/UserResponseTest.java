@@ -26,7 +26,6 @@ class UserResponseTest {
         UserResponse expectedResponse = UserResponse.YES;
         // when
         UserResponse userResponse = UserResponse.from(input);
-
         // then
         assertThat(userResponse).isEqualTo(expectedResponse);
     }
@@ -38,7 +37,6 @@ class UserResponseTest {
         UserResponse expectedResponse = UserResponse.NO;
         // when
         UserResponse userResponse = UserResponse.from(input);
-
         // then
         assertThat(userResponse).isEqualTo(expectedResponse);
     }

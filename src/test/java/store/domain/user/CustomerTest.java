@@ -12,7 +12,6 @@ class CustomerTest {
     void isMemberOfConvenience() {
         //given
         Customer customer = new Customer(MemberShipType.MEMBERSHIP_MEMBER);
-
         // given & when
         assertThat(customer.hasMembership()).isTrue();
     }
@@ -22,7 +21,6 @@ class CustomerTest {
     void isNotMemberOfConvenience() {
         //given
         Customer customer = new Customer(MemberShipType.REGULAR_MEMBER);
-
         // given & when
         assertThat(customer.hasMembership()).isFalse();
     }

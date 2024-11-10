@@ -28,10 +28,8 @@ class PromotionsTest {
     void findPromotionByValidName() {
         // given
         String promotionName = "반짝할인";
-
         // when
         Promotion promotion = promotions.findPromotionByName(promotionName);
-
         // then
         assertThat(promotion)
                 .isNotNull()

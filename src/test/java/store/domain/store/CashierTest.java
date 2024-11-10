@@ -46,10 +46,8 @@ class CashierTest {
     void findShortagePromotionItems() {
         // given
         setUp("[콜라-2],[비타민워터-1],[초코바-1]");
-
         // when
         List<PromotionItem> promotionItems = cashier.getShortagePromotionItems();
-
         // then
         assertThat(promotionItems)
                 .hasSize(2)
@@ -62,12 +60,10 @@ class CashierTest {
     void removePromotionItemFromCart() {
         // given
         setUp("[콜라-11],[물-1]");
-
         // when
         List<PromotionItem> promotionItems = cashier.getExceedingPromotionItems();
         PromotionItem promotionItem = promotionItems.getFirst();
         cashier.removePromotionItemFromCart(promotionItem, 3);
-
         // then
         assertThat(promotionItem.getQuantity()).isEqualTo(8);
     }
@@ -77,12 +73,10 @@ class CashierTest {
     void addPromotionItemFromCart() {
         // given
         setUp("[콜라-2],[에너지바-5]");
-
         // when
         List<PromotionItem> promotionItems = cashier.getShortagePromotionItems();
         PromotionItem promotionItem = promotionItems.getFirst();
         cashier.addPromotionItemFromCart(promotionItem);
-
         // then
         assertThat(promotionItem.getQuantity()).isEqualTo(3);
     }
@@ -92,10 +86,8 @@ class CashierTest {
     void finishPayment() {
         // given
         setUp("[콜라-3]");
-
         // when
         cashier.finishPayment();
-
         // then
         assertThat(convenience.getItems().findItemByName("콜라").getQuantity()).isEqualTo(7);
     }

@@ -18,7 +18,6 @@ class ConvenienceTest {
         // given
         PromotionItem promotionItem = new PromotionItem("초코바", 1200, 1, "MD추천상품");
         boolean expected = true;
-
         // when & then
         assertThat(convenience.canReceiveAdditionalBenefit(promotionItem)).isEqualTo(expected);
     }
@@ -35,7 +34,6 @@ class ConvenienceTest {
                                              final int productCount, final int expected) {
         // given
         PromotionItem promotionItem = new PromotionItem(productName, price, productCount, promotion);
-
         // when & then
         assertThat(convenience.calculateItemCountWithoutPromotion(promotionItem)).isEqualTo(expected);
     }
