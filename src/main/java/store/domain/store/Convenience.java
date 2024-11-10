@@ -15,6 +15,7 @@ import store.domain.user.ShoppingItems;
 public class Convenience {
 
     private static final int EXACT_MATCH = 0;
+    private static final int GIVEN_FREE_ITEM = 1;
 
     private final Initializer initializer;
     private final Promotions promotions;
@@ -69,7 +70,8 @@ public class Convenience {
 
     private boolean isLessThanPromotionStandard(final PromotionItem promotionItem) {
         int promotionGroupSize = items.getPromotionBundleSize(promotionItem.getName(), promotions);
-        return (promotionItem.getQuantity() % promotionGroupSize) != EXACT_MATCH;
+        int quantityWhenGiveFreeItem = promotionItem.getQuantity() + GIVEN_FREE_ITEM;
+        return (quantityWhenGiveFreeItem % promotionGroupSize) == EXACT_MATCH;
     }
 
     int calculateNumberOfFreeItem(final PromotionItem promotionItem) {
