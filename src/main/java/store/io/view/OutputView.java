@@ -1,7 +1,5 @@
 package store.io.view;
 
-import java.text.NumberFormat;
-import java.util.Locale;
 import store.dto.ItemStatus;
 import store.dto.Receipt;
 import store.io.view.util.ReceiptFormatter;
@@ -13,7 +11,6 @@ public class OutputView {
     private static final String SOLD_OUT = "재고 없음";
     private static final String QUANTITY_UNIT = "개";
     private static final String NEW_LINE = System.lineSeparator();
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
 
     public void printWelcomeMessage() {
         System.out.println(NEW_LINE + WELCOME_MESSAGE);
@@ -21,9 +18,9 @@ public class OutputView {
 
     public void printItems(ItemStatus itemStatus) {
         System.out.println(PRODUCT_STATUS_MESSAGE + NEW_LINE);
-        itemStatus.getItemDetails().forEach(itemDetail -> System.out.printf("- %s %s원 %s %s%s", itemDetail.name(),
-                numberFormat.format(itemDetail.price()), formatQuantity(itemDetail.quantity()), itemDetail.promotion(),
-                NEW_LINE));
+        itemStatus.getItemDetails().forEach(
+                itemDetail -> System.out.printf("- %s %,d원 %s %s%s", itemDetail.name(), itemDetail.price(),
+                        formatQuantity(itemDetail.quantity()), itemDetail.promotion(), NEW_LINE));
     }
 
     public void printReceipt(final Receipt receipt) {
