@@ -1,5 +1,6 @@
 package store.domain.store.promotion;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 
 public class Promotion {
@@ -26,7 +27,7 @@ public class Promotion {
     }
 
     public boolean isBetweenPromotionDuration() {
-        LocalDate present = LocalDate.now();
+        LocalDate present = DateTimes.now().toLocalDate();
         return (present.isEqual(startDate) || present.isAfter(startDate)) &&
                 (present.isEqual(endDate) || present.isBefore(endDate));
     }
