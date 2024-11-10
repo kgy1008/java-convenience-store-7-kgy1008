@@ -21,6 +21,7 @@ import store.io.view.InputView;
 import store.io.view.OutputView;
 
 public class ConvenienceController {
+
     private final InputView inputView;
     private final OutputView outputView;
     private final Convenience convenience;
@@ -75,7 +76,6 @@ public class ConvenienceController {
     private void classifyItems(final ShoppingItems shoppingItems) {
         cashier.receiveAndClassifyItems(shoppingItems);
     }
-
 
     private void checkPromotionPolicy() {
         manageWhenPromotionStockIsExceed();

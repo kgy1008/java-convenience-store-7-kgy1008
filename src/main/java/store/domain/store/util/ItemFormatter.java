@@ -72,8 +72,8 @@ public class ItemFormatter {
     }
 
     private void validateNoDuplicate(final List<ShoppingItem> shoppingItems) {
-        Set<ShoppingItem> ItemSet = new HashSet<>(shoppingItems);
-        if (ItemSet.size() != shoppingItems.size()) {
+        Set<ShoppingItem> uniqueShoppingItems = new HashSet<>(shoppingItems);
+        if (uniqueShoppingItems.size() != shoppingItems.size()) {
             throw new AppException(CONFLICT_EXCEPTION.getMessage());
         }
     }

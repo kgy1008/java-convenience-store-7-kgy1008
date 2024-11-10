@@ -6,6 +6,7 @@ import java.util.Arrays;
 import store.common.exception.AppException;
 
 public enum UserResponse {
+
     YES("Y"),
     NO("N");
 

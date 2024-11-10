@@ -6,6 +6,7 @@ import store.io.provider.ProductFileReader;
 import store.io.provider.PromotionFileReader;
 
 public class Initializer {
+
     private final ProductFileReader productFileReader;
     private final PromotionFileReader promotionFileReader;
 
