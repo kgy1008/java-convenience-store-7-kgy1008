@@ -8,9 +8,9 @@ import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
-import store.domain.store.util.ProductFormatter;
-import store.domain.user.ShoppingProduct;
-import store.domain.user.ShoppingProducts;
+import store.domain.store.util.ItemFormatter;
+import store.domain.user.ShoppingItem;
+import store.domain.user.ShoppingItems;
 
 public class Convenience {
 
@@ -26,10 +26,10 @@ public class Convenience {
         this.items = initializer.initItems();
     }
 
-    public ShoppingProducts getShoppingItemsFromUser(final String input) {
-        ProductFormatter productFormatter = new ProductFormatter();
-        List<ShoppingProduct> products = productFormatter.convertStringToItem(input, items);
-        return new ShoppingProducts(products);
+    public ShoppingItems getShoppingItemsFromUser(final String input) {
+        ItemFormatter itemFormatter = new ItemFormatter();
+        List<ShoppingItem> shoppingItems = itemFormatter.convertStringToItem(input, items);
+        return new ShoppingItems(shoppingItems);
     }
 
     public int calculateItemCountWithoutPromotion(final PromotionItem promotionItem) {
@@ -49,9 +49,9 @@ public class Convenience {
         return fullPromotionGroupCount * promotionGroupSize;
     }
 
-    boolean isPromotionApplicableToday(final ShoppingProduct shoppingProduct) {
-        if (items.isPromotionProduct(shoppingProduct.getName())) {
-            String promotionName = items.getPromotionNameOfItem(shoppingProduct.getName());
+    boolean isPromotionApplicableToday(final ShoppingItem shoppingItem) {
+        if (items.isPromotionItem(shoppingItem.getName())) {
+            String promotionName = items.getPromotionNameOfItem(shoppingItem.getName());
             Promotion promotion = promotions.findPromotionByName(promotionName);
             return promotion.isBetweenPromotionDuration();
         }

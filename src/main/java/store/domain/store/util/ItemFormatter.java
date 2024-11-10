@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Set;
 import store.common.exception.AppException;
 import store.domain.store.item.Items;
-import store.domain.user.ShoppingProduct;
+import store.domain.user.ShoppingItem;
 
-public class ProductFormatter {
+public class ItemFormatter {
 
     private static final String DELIMITER = ",";
     private static final String PREFIX = "[";
@@ -23,20 +23,20 @@ public class ProductFormatter {
     private static final String DETAIL_DELIMITER = "-";
     private static final int MINIMUM_PURCHASE_QUANTITY = 1;
 
-    public List<ShoppingProduct> convertStringToItem(final String input, final Items items) {
-        List<ShoppingProduct> shoppingProducts = Arrays.stream(input.split(DELIMITER))
+    public List<ShoppingItem> convertStringToItem(final String input, final Items items) {
+        List<ShoppingItem> shoppingItems = Arrays.stream(input.split(DELIMITER))
                 .map(item -> parseData(item, items))
                 .toList();
-        validateNoDuplicate(shoppingProducts);
-        return shoppingProducts;
+        validateNoDuplicate(shoppingItems);
+        return shoppingItems;
     }
 
-    private ShoppingProduct parseData(final String input, final Items items) {
+    private ShoppingItem parseData(final String input, final Items items) {
         String[] data = input.replace(PREFIX, "").replace(SUFFIX, "").trim().split(DETAIL_DELIMITER);
         String name = data[0];
         int quantity = convertStringToInt(data[1]);
         validate(name, quantity, items);
-        return new ShoppingProduct(name, quantity);
+        return new ShoppingItem(name, quantity);
     }
 
     private int convertStringToInt(final String input) {
@@ -71,9 +71,9 @@ public class ProductFormatter {
         return items.checkRemainingStock(name) < quantity;
     }
 
-    private void validateNoDuplicate(final List<ShoppingProduct> shoppingProducts) {
-        Set<ShoppingProduct> productSet = new HashSet<>(shoppingProducts);
-        if (productSet.size() != shoppingProducts.size()) {
+    private void validateNoDuplicate(final List<ShoppingItem> shoppingItems) {
+        Set<ShoppingItem> ItemSet = new HashSet<>(shoppingItems);
+        if (ItemSet.size() != shoppingItems.size()) {
             throw new AppException(CONFLICT_EXCEPTION.getMessage());
         }
     }

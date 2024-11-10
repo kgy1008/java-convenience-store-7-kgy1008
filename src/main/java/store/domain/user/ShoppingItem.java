@@ -2,12 +2,12 @@ package store.domain.user;
 
 import java.util.Objects;
 
-public class ShoppingProduct {
+public class ShoppingItem {
 
     private final String name;
     private int quantity;
 
-    public ShoppingProduct(final String name, final int quantity) {
+    public ShoppingItem(final String name, final int quantity) {
         this.name = name;
         this.quantity = quantity;
     }
@@ -28,7 +28,7 @@ public class ShoppingProduct {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ShoppingProduct that = (ShoppingProduct) o;
+        ShoppingItem that = (ShoppingItem) o;
         return Objects.equals(name, that.name);
     }
 

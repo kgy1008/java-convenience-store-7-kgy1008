@@ -8,7 +8,7 @@ public interface Item {
 
     boolean isEqual(final String name);
 
-    boolean isPromotionProduct();
+    boolean isPromotionItem();
 
     String getName();
 

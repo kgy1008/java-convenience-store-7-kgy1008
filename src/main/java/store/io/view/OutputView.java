@@ -19,7 +19,7 @@ public class OutputView {
         System.out.println(NEW_LINE + WELCOME_MESSAGE);
     }
 
-    public void printProducts(ItemStatus itemStatus) {
+    public void printItems(ItemStatus itemStatus) {
         System.out.println(PRODUCT_STATUS_MESSAGE + NEW_LINE);
         itemStatus.getItemDetails().forEach(itemDetail -> System.out.printf("- %s %s원 %s %s%s", itemDetail.name(),
                 numberFormat.format(itemDetail.price()), formatQuantity(itemDetail.quantity()), itemDetail.promotion(),

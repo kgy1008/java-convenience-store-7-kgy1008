@@ -33,7 +33,7 @@ public class BasicItem implements Item {
     }
 
     @Override
-    public boolean isPromotionProduct() {
+    public boolean isPromotionItem() {
         return false;
     }
 

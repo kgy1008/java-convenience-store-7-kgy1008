@@ -11,11 +11,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.store.item.BasicItem;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
-import store.domain.user.ShoppingProduct;
+import store.domain.user.ShoppingItem;
 
-class ProductFormatterTest {
+class ItemFormatterTest {
 
-    private final ProductFormatter productFormatter = new ProductFormatter();
+    private final ItemFormatter itemFormatter = new ItemFormatter();
     private final Items items = new Items(List.of(
             new PromotionItem("콜라", 1800, 10, "탄산2+1"),
             new BasicItem("콜라", 1800, 5),
@@ -27,7 +27,7 @@ class ProductFormatterTest {
     void validateDuplicated() {
         String input = "[콜라-3],[콜라-2]";
 
-        assertThatThrownBy(() -> productFormatter.convertStringToItem(input, items))
+        assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -35,7 +35,7 @@ class ProductFormatterTest {
     @DisplayName("존재하지 않는 상품이 입력으로 들어왔을 경우, 예외 발생")
     @ValueSource(strings = {"[사이다-2]", "[새우-1]", "[콜라-3],[사이다-2]"})
     void validateNotExistProduct(final String input) {
-        assertThatThrownBy(() -> productFormatter.convertStringToItem(input, items))
+        assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -43,7 +43,7 @@ class ProductFormatterTest {
     @DisplayName("입력된 재품 수량이 재고를 초과할 경우, 예외 발생")
     @ValueSource(strings = {"[콜라-16]", "[새우깡-20]", "[새우깡-1],[콜라-16]"})
     void validateIsExceedQuantity(final String input) {
-        assertThatThrownBy(() -> productFormatter.convertStringToItem(input, items))
+        assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -51,7 +51,7 @@ class ProductFormatterTest {
     @DisplayName("유효하지 않는 수량이 입력값으로 들어올 경우, 예외 발생")
     @ValueSource(strings = {"[콜라-0]", "[콜라--1]", "[콜라-s]"})
     void validateNotPositiveQuantity(final String input) {
-        assertThatThrownBy(() -> productFormatter.convertStringToItem(input, items))
+        assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -59,8 +59,8 @@ class ProductFormatterTest {
     @DisplayName("정상 입력 테스트")
     @ValueSource(strings = {"[콜라-15]", "[새우깡-15]", "[콜라-15],[새우깡-15]"})
     void validShoppingItem(final String input) {
-        List<ShoppingProduct> shoppingProducts = productFormatter.convertStringToItem(input, items);
+        List<ShoppingItem> shoppingItems = itemFormatter.convertStringToItem(input, items);
 
-        assertNotNull(shoppingProducts);
+        assertNotNull(shoppingItems);
     }
 }

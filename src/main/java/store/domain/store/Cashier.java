@@ -6,8 +6,8 @@ import store.domain.store.item.BasicItem;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
-import store.domain.user.ShoppingProduct;
-import store.domain.user.ShoppingProducts;
+import store.domain.user.ShoppingItem;
+import store.domain.user.ShoppingItems;
 import store.dto.FreeItem;
 import store.dto.Receipt;
 
@@ -25,27 +25,27 @@ public class Cashier {
         this.basicItems = new ArrayList<>();
     }
 
-    public void receiveAndClassifyItems(final ShoppingProducts shoppingProducts) {
+    public void receiveAndClassifyItems(final ShoppingItems shoppingItems) {
         final Items items = convenience.getItems();
-        for (ShoppingProduct shoppingProduct : shoppingProducts.getProducts()) {
-            String name = shoppingProduct.getName();
+        for (ShoppingItem shoppingItem : shoppingItems.getItems()) {
+            String name = shoppingItem.getName();
             Item item = items.findItemByName(name);
-            if (convenience.isPromotionApplicableToday(shoppingProduct)) {
-                extractPromotionItems(shoppingProduct, item);
+            if (convenience.isPromotionApplicableToday(shoppingItem)) {
+                extractPromotionItems(shoppingItem, item);
                 continue;
             }
-            extractBasicItems(shoppingProduct, item);
+            extractBasicItems(shoppingItem, item);
         }
     }
 
-    private void extractPromotionItems(final ShoppingProduct shoppingProduct, final Item item) {
-        PromotionItem promotionItem = new PromotionItem(item.getName(), item.getPrice(), shoppingProduct.getQuantity(),
+    private void extractPromotionItems(final ShoppingItem shoppingItem, final Item item) {
+        PromotionItem promotionItem = new PromotionItem(item.getName(), item.getPrice(), shoppingItem.getQuantity(),
                 item.getPromotionName());
         promotionItems.add(promotionItem);
     }
 
-    private void extractBasicItems(final ShoppingProduct shoppingProduct, final Item item) {
-        BasicItem basicItem = new BasicItem(item.getName(), item.getPrice(), shoppingProduct.getQuantity());
+    private void extractBasicItems(final ShoppingItem shoppingItem, final Item item) {
+        BasicItem basicItem = new BasicItem(item.getName(), item.getPrice(), shoppingItem.getQuantity());
         basicItems.add(basicItem);
     }
 
@@ -85,10 +85,10 @@ public class Cashier {
 
     private List<FreeItem> findFreeItem(final List<PromotionItem> promotionItems) {
         return promotionItems.stream()
-                .map(product -> new FreeItem(product.getName(),
-                        convenience.calculateNumberOfFreeItem(product),
-                        product.getPrice(),
-                        convenience.findPromotionBundleSize(product)))
+                .map(item -> new FreeItem(item.getName(),
+                        convenience.calculateNumberOfFreeItem(item),
+                        item.getPrice(),
+                        convenience.findPromotionBundleSize(item)))
                 .toList();
     }
 

@@ -30,7 +30,7 @@ public class PromotionItem implements Item {
     }
 
     @Override
-    public boolean isPromotionProduct() {
+    public boolean isPromotionItem() {
         return true;
     }
 

@@ -33,9 +33,9 @@ public class Items {
         return item.getPromotionName();
     }
 
-    public boolean isPromotionProduct(final String name) {
+    public boolean isPromotionItem(final String name) {
         Item item = findItemByName(name);
-        return item.isPromotionProduct();
+        return item.isPromotionItem();
     }
 
     public Item findItemByName(final String name) {

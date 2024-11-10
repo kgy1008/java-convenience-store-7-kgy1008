@@ -6,21 +6,21 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import store.domain.store.item.PromotionItem;
-import store.domain.store.util.ProductFormatter;
-import store.domain.user.ShoppingProduct;
-import store.domain.user.ShoppingProducts;
+import store.domain.store.util.ItemFormatter;
+import store.domain.user.ShoppingItem;
+import store.domain.user.ShoppingItems;
 
 class CashierTest {
 
     private final Convenience convenience = new Convenience();
     private final Cashier cashier = new Cashier(convenience);
-    private final ProductFormatter productFormatter = new ProductFormatter();
+    private final ItemFormatter itemFormatter = new ItemFormatter();
 
     private void setUp(final String input) {
         // given
-        List<ShoppingProduct> shoppingProducts = productFormatter
+        List<ShoppingItem> shoppingItems = itemFormatter
                 .convertStringToItem(input, convenience.getItems());
-        ShoppingProducts products = new ShoppingProducts(shoppingProducts);
+        ShoppingItems products = new ShoppingItems(shoppingItems);
 
         cashier.receiveAndClassifyItems(products);
     }

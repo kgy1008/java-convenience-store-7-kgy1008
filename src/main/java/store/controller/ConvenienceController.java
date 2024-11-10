@@ -13,7 +13,7 @@ import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.user.Customer;
 import store.domain.user.MemberShipType;
-import store.domain.user.ShoppingProducts;
+import store.domain.user.ShoppingItems;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
 import store.dto.Receipt;
@@ -45,9 +45,9 @@ public class ConvenienceController {
     }
 
     private void purchase() {
-        retryTemplate(this::displayProduct);
-        ShoppingProducts products = pickProductsToBuy();
-        classifyProducts(products);
+        retryTemplate(this::displayItems);
+        ShoppingItems items = pickItemsToBuy();
+        classifyItems(items);
         checkPromotionPolicy();
         boolean receiveMembershipBenefit = checkMemberShipBenefit();
         Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
@@ -58,22 +58,22 @@ public class ConvenienceController {
         cashier.finishPayment();
     }
 
-    private void displayProduct() {
+    private void displayItems() {
         outputView.printWelcomeMessage();
         Items items = convenience.getItems();
         ItemStatus itemStatus = new ItemStatus(items.getItems());
-        outputView.printProducts(itemStatus);
+        outputView.printItems(itemStatus);
     }
 
-    private ShoppingProducts pickProductsToBuy() {
+    private ShoppingItems pickItemsToBuy() {
         return retryTemplate(() -> {
             String shoppingItems = inputView.inputShoppingItems();
             return convenience.getShoppingItemsFromUser(shoppingItems);
         });
     }
 
-    private void classifyProducts(final ShoppingProducts shoppingProducts) {
-        cashier.receiveAndClassifyItems(shoppingProducts);
+    private void classifyItems(final ShoppingItems shoppingItems) {
+        cashier.receiveAndClassifyItems(shoppingItems);
     }
 
 
