@@ -33,7 +33,7 @@ public class Items {
         return item.getPromotionName();
     }
 
-    public boolean isExistPromotionProduct(final String name) {
+    public boolean isPromotionProduct(final String name) {
         Item item = findItemByName(name);
         return item.isPromotionProduct();
     }
@@ -61,7 +61,7 @@ public class Items {
         Promotion promotion = promotions.findPromotionByName(promotionItem.getPromotionName());
         return promotion.getPromotionBundleSize();
     }
-    
+
     public List<Item> getItems() {
         return Collections.unmodifiableList(items);
     }

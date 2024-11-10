@@ -50,7 +50,7 @@ public class Convenience {
     }
 
     boolean isPromotionApplicableToday(final ShoppingProduct shoppingProduct) {
-        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
+        if (items.isPromotionProduct(shoppingProduct.getName())) {
             String promotionName = items.getPromotionNameOfItem(shoppingProduct.getName());
             Promotion promotion = promotions.findPromotionByName(promotionName);
             return promotion.isBetweenPromotionDuration();
