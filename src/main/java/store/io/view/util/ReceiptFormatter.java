@@ -21,10 +21,7 @@ public final class ReceiptFormatter {
     public static final String MEMBERSHIP_DISCOUNT_PRICE = "멤버십할인";
     public static final String PAYMENT = "내실돈";
 
-    private static final int NAME_WIDTH = 15;
-    private static final int QUANTITY_WIDTH = 5;
-    private static final int PRICE_WIDTH = 10;
-
+    private static final String NEW_LINE = System.lineSeparator();
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
 
     public void printReceipt(final Receipt receipt) {
@@ -36,7 +33,7 @@ public final class ReceiptFormatter {
 
     private void printHeader() {
         System.out.println(RECEIPT_HEADER);
-        System.out.printf("%-15s %5s %8s%n", ITEM_NAME, ITEM_QUANTITY, ITEM_PRICE);
+        System.out.printf("%-18s %-7s %s%s", ITEM_NAME, ITEM_QUANTITY, ITEM_PRICE, NEW_LINE);
     }
 
     private void printItemInformation(final Receipt receipt) {
@@ -49,45 +46,35 @@ public final class ReceiptFormatter {
             String formattedQuantity = numberFormat.format(promotionItem.getQuantity());
             String formattedTotalPriceOfItem = numberFormat.format(
                     promotionItem.getPrice() * promotionItem.getQuantity());
-            System.out.println(formatLine(promotionItem.getName(), formattedQuantity, formattedTotalPriceOfItem));
+            System.out.printf("%-18s %-8s %s%s", promotionItem.getName(), formattedQuantity, formattedTotalPriceOfItem,
+                    NEW_LINE);
         }
     }
+
 
     private void printBasicItemInformation(final Receipt receipt) {
         for (BasicItem basicItem : receipt.basicItems()) {
             String formattedQuantity = numberFormat.format(basicItem.getQuantity());
             String formattedPrice = numberFormat.format(basicItem.getPrice() * basicItem.getQuantity());
-            System.out.println(formatLine(basicItem.getName(), formattedQuantity, formattedPrice));
+            System.out.printf("%-18s %-8s %s%s", basicItem.getName(), formattedQuantity, formattedPrice, NEW_LINE);
         }
     }
 
     private void printGiftInformation(final Receipt receipt) {
         System.out.println(RECEIPT_GIFT_HEADER);
         for (FreeItem freeItem : receipt.freeItems()) {
-            System.out.println(formatGiftLine(freeItem.name(), freeItem.getFormattedQuantity()));
+            System.out.printf("%-18s %-8s %s", freeItem.name(), freeItem.getFormattedQuantity(), NEW_LINE);
         }
     }
 
     private void printPriceInformation(final Receipt receipt) {
         System.out.println(DIVIDING_LINE);
-        System.out.println(formatLine(TOTAL_PRICE, receipt.getFormattedTotalCount(), receipt.getFormattedTotalPrice()));
-        System.out.println(formatPriceLine(PROMOTION_DISCOUNT_PRICE, receipt.getFormattedPromotionDiscountPrice()));
-        System.out.println(formatPriceLine(MEMBERSHIP_DISCOUNT_PRICE, receipt.getFormattedMembershipDiscountPrice()));
-        System.out.println(formatPriceLine(PAYMENT, receipt.getFormattedPayment()));
-    }
-
-    private String formatLine(String name, String quantity, String price) {
-        return String.format("%-" + NAME_WIDTH + "s %" + QUANTITY_WIDTH + "s %" + PRICE_WIDTH + "s",
-                name, quantity, price);
-    }
-
-    private String formatGiftLine(String name, String quantity) {
-        return String.format("%-" + NAME_WIDTH + "s %" + QUANTITY_WIDTH + "s",
-                name, quantity);
-    }
-
-    private String formatPriceLine(String label, String price) {
-        return String.format("%-" + NAME_WIDTH + "s %" + (QUANTITY_WIDTH + PRICE_WIDTH) + "s",
-                label, price);
+        System.out.printf("%-18s %-7s %s%s", TOTAL_PRICE, receipt.getFormattedTotalCount(),
+                receipt.getFormattedTotalPrice(), NEW_LINE);
+        System.out.printf("%-27s %s %s", PROMOTION_DISCOUNT_PRICE, receipt.getFormattedPromotionDiscountPrice(),
+                NEW_LINE);
+        System.out.printf("%-27s %s %s", MEMBERSHIP_DISCOUNT_PRICE, receipt.getFormattedMembershipDiscountPrice(),
+                NEW_LINE);
+        System.out.printf("%-28s %s %s", PAYMENT, receipt.getFormattedPayment(), NEW_LINE);
     }
 }
