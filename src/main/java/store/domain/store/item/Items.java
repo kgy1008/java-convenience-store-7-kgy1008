@@ -28,11 +28,6 @@ public class Items {
                 .sum();
     }
 
-    public String getPromotionNameOfItem(final String name) {
-        Item item = findItemByName(name);
-        return item.getPromotionName();
-    }
-
     public boolean isPromotionItem(final String name) {
         Item item = findItemByName(name);
         return item.isPromotionItem();
