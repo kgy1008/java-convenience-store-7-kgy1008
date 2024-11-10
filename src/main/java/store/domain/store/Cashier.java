@@ -14,6 +14,7 @@ import store.dto.Receipt;
 public class Cashier {
 
     private static final int FREE_BENEFIT = 1;
+    private static final int EMPTY = 0;
 
     private final Convenience convenience;
     private final List<PromotionItem> promotionItems;
@@ -63,10 +64,18 @@ public class Cashier {
 
     public void removePromotionItemFromCart(final PromotionItem promotionItem, final int itemsWithoutPromotionCount) {
         promotionItem.decreaseQuantity(itemsWithoutPromotionCount);
+        if (promotionItem.getQuantity() == EMPTY) {
+            promotionItems.remove(promotionItem);
+        }
     }
 
     public void addPromotionItemFromCart(final PromotionItem promotionItem) {
         promotionItem.increaseQuantity(FREE_BENEFIT);
+    }
+
+    public boolean isCartNotEmpty() {
+        int totalCartSize = basicItems.size() + promotionItems.size();
+        return totalCartSize > 0;
     }
 
     public Receipt generateReceipt(final boolean hasMembershipBenefit) {

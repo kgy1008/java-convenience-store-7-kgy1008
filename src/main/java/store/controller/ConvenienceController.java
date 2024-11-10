@@ -39,20 +39,26 @@ public class ConvenienceController {
     public void run() {
         KioskStatus kioskStatus = ON;
         while (kioskStatus == ON) {
-            purchase();
+            reviewPromotionAndConfirmPurchaseToUser();
+            executePayment();
             updateItem();
             kioskStatus = askForBuyMore();
         }
     }
 
-    private void purchase() {
+    private void reviewPromotionAndConfirmPurchaseToUser() {
         retryTemplate(this::displayItems);
         ShoppingItems items = pickItemsToBuy();
         classifyItems(items);
         checkPromotionPolicy();
-        boolean receiveMembershipBenefit = checkMemberShipBenefit();
-        Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
-        displayReceipt(receipt);
+    }
+
+    private void executePayment() {
+        if (cashier.isCartNotEmpty()) {
+            boolean receiveMembershipBenefit = checkMemberShipBenefit();
+            Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
+            displayReceipt(receipt);
+        }
     }
 
     private void updateItem() {
