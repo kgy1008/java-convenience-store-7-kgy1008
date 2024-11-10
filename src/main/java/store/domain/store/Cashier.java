@@ -80,8 +80,7 @@ public class Cashier {
         int totalCount = calculator.calculateTotalCount(basicItems, promotionItems);
 
         return Receipt.from(promotionItems, basicItems, freeItems, totalPrice, promotionDiscountPrice,
-                memberShipDiscountPrice,
-                payment, totalCount);
+                memberShipDiscountPrice, payment, totalCount);
     }
 
     private List<FreeItem> findFreeItem(final List<PromotionItem> promotionItems) {

@@ -28,6 +28,16 @@ public class BasicItem implements Item {
     }
 
     @Override
+    public boolean isEqual(final String name) {
+        return this.name.equals(name);
+    }
+
+    @Override
+    public boolean isPromotionProduct() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -45,15 +55,5 @@ public class BasicItem implements Item {
     @Override
     public int getQuantity() {
         return quantity;
-    }
-
-    @Override
-    public boolean isEqual(final String name) {
-        return this.name.equals(name);
-    }
-
-    @Override
-    public boolean isPromotionProduct() {
-        return false;
     }
 }

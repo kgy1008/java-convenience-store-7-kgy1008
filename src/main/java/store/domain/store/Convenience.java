@@ -32,13 +32,10 @@ public class Convenience {
         return new ShoppingProducts(products);
     }
 
-    boolean isPromotionApplicableToday(final ShoppingProduct shoppingProduct) {
-        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
-            String promotionName = items.getPromotionNameOfItem(shoppingProduct.getName());
-            Promotion promotion = promotions.findPromotionByName(promotionName);
-            return promotion.isBetweenPromotionDuration();
-        }
-        return false;
+    public int calculateItemCountWithoutPromotion(final PromotionItem promotionItem) {
+        int inputQuantity = promotionItem.getQuantity();
+        int promotionItemsAvailableSize = calculateMaxCountOfPromotionApplied(promotionItem);
+        return inputQuantity - promotionItemsAvailableSize;
     }
 
     boolean isPromotionNotApplicableToAllItems(final PromotionItem promotionItem) {
@@ -52,10 +49,13 @@ public class Convenience {
         return fullPromotionGroupCount * promotionGroupSize;
     }
 
-    public int calculateItemCountWithoutPromotion(final PromotionItem promotionItem) {
-        int inputQuantity = promotionItem.getQuantity();
-        int promotionItemsAvailableSize = calculateMaxCountOfPromotionApplied(promotionItem);
-        return inputQuantity - promotionItemsAvailableSize;
+    boolean isPromotionApplicableToday(final ShoppingProduct shoppingProduct) {
+        if (items.isExistPromotionProduct(shoppingProduct.getName())) {
+            String promotionName = items.getPromotionNameOfItem(shoppingProduct.getName());
+            Promotion promotion = promotions.findPromotionByName(promotionName);
+            return promotion.isBetweenPromotionDuration();
+        }
+        return false;
     }
 
     boolean canReceiveAdditionalBenefit(final PromotionItem promotionItem) {

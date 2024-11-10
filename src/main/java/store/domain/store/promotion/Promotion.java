@@ -18,10 +18,6 @@ public class Promotion {
         this.endDate = endDate;
     }
 
-    public boolean isEqual(final String name) {
-        return this.name.equals(name);
-    }
-
     public int getPromotionBundleSize() {
         return PromotionType.getPromotionBundleSize(promotionType);
     }
@@ -30,5 +26,9 @@ public class Promotion {
         LocalDate present = DateTimes.now().toLocalDate();
         return (present.isEqual(startDate) || present.isAfter(startDate)) &&
                 (present.isEqual(endDate) || present.isBefore(endDate));
+    }
+
+    boolean isEqual(final String name) {
+        return this.name.equals(name);
     }
 }

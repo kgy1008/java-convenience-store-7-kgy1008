@@ -28,10 +28,6 @@ public class Items {
                 .sum();
     }
 
-    public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
-    }
-
     public String getPromotionNameOfItem(final String name) {
         Item item = findItemByName(name);
         return item.getPromotionName();
@@ -64,5 +60,9 @@ public class Items {
         Item promotionItem = findItemByName(name);
         Promotion promotion = promotions.findPromotionByName(promotionItem.getPromotionName());
         return promotion.getPromotionBundleSize();
+    }
+    
+    public List<Item> getItems() {
+        return Collections.unmodifiableList(items);
     }
 }
