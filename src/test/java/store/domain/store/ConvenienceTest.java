@@ -1,6 +1,6 @@
 package store.domain.store;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -66,22 +66,35 @@ class ConvenienceTest {
     void updateStockAfterPayment() {
         // given
         Items items = convenience.getItems();
-        List<PromotionItem> promotionItems = List.of(new PromotionItem("콜라", 1000, 15, "탄산2+1"),
-                new PromotionItem("오렌지주스", 1800, 5, "MD추천상품"));
-        List<BasicItem> basicItems = List.of(new BasicItem("에너지바", 2000, 3));
+        List<PromotionItem> promotionItems = List.of(
+                new PromotionItem("콜라", 1000, 15, "탄산2+1"),
+                new PromotionItem("오렌지주스", 1800, 5, "MD추천상품")
+        );
+        List<BasicItem> basicItems = List.of(
+                new BasicItem("에너지바", 2000, 3)
+        );
         // when
         convenience.updateItemQuantity(promotionItems, basicItems);
         // then
-        List<Item> cokeItem = items.findItemsByName("콜라");
-        Item promotionCoke = cokeItem.getFirst();
-        Item basicCoke = cokeItem.getLast();
-        assertThat(promotionCoke.getQuantity()).isZero();
-        assertThat(basicCoke.getQuantity()).isEqualTo(5);
+        compareItemQuantity(items, "콜라", 0, 5);
+        compareItemQuantity(items, "오렌지주스", 4);
+        compareItemQuantity(items, "에너지바", 2);
+    }
 
-        Item promotionOrangeJuice = items.findItemByName("오렌지주스");
-        assertThat(promotionOrangeJuice.getQuantity()).isEqualTo(4);
+    private void compareItemQuantity(final Items items, final String itemName, final int expectedPromotionQuantity,
+                                     final int expectedBasicQuantity) {
+        List<Item> foundItems = items.findItemsByName(itemName);
+        assertThat(foundItems).hasSize(2);
 
-        Item BasicEnergyStick = items.findItemByName("에너지바");
-        assertThat(BasicEnergyStick.getQuantity()).isEqualTo(2);
+        Item promotionItem = foundItems.get(0);
+        Item basicItem = foundItems.get(1);
+
+        assertThat(promotionItem.getQuantity()).isEqualTo(expectedPromotionQuantity);
+        assertThat(basicItem.getQuantity()).isEqualTo(expectedBasicQuantity);
+    }
+
+    private void compareItemQuantity(final Items items, final String itemName, final int expectedQuantity) {
+        Item foundItem = items.findItemByName(itemName);
+        assertThat(foundItem.getQuantity()).isEqualTo(expectedQuantity);
     }
 }
