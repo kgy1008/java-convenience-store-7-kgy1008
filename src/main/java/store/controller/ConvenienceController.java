@@ -12,7 +12,6 @@ import store.domain.store.KioskStatus;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.user.Customer;
-import store.domain.user.MemberShipType;
 import store.domain.user.ShoppingItems;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
@@ -28,12 +27,13 @@ public class ConvenienceController {
     private final Cashier cashier;
     private final Customer customer;
 
-    public ConvenienceController() {
-        this.inputView = new InputView();
-        this.outputView = new OutputView();
-        this.convenience = new Convenience();
-        this.cashier = new Cashier(convenience);
-        this.customer = new Customer(MemberShipType.MEMBERSHIP_MEMBER);
+    public ConvenienceController(final InputView inputView, final OutputView outputView, final Convenience convenience,
+                                 final Cashier cashier, final Customer customer) {
+        this.inputView = inputView;
+        this.outputView = outputView;
+        this.convenience = convenience;
+        this.cashier = cashier;
+        this.customer = customer;
     }
 
     public void run() {
