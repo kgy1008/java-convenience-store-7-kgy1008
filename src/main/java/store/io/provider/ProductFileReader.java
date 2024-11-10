@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import store.common.exception.FileReadException;
 import store.domain.store.item.BasicItem;
 import store.domain.store.item.Item;
@@ -33,7 +34,7 @@ public class ProductFileReader {
 
     private List<Item> processLines(final List<String> lines) {
         List<Item> items = new ArrayList<>();
-        Item previousItem = null;
+        Optional<Item> previousItem = Optional.empty();
         for (String line : lines.stream().skip(HEADER_LINE).toList()) {
             previousItem = processLine(line, items, previousItem);
         }
@@ -41,23 +42,24 @@ public class ProductFileReader {
         return items;
     }
 
-    private Item processLine(final String line, final List<Item> items, final Item previousItem) {
+    private Optional<Item> processLine(final String line, final List<Item> items, final Optional<Item> previousItem) {
         Item currentItem = parseData(line);
-        if (shouldAddBaseItem(previousItem, currentItem)) {
-            addBaseItemIfMissing(items, previousItem);
+        if (previousItem.isPresent() && shouldAddBaseItem(previousItem.get(), currentItem)) {
+            addBaseItemIfMissing(items, previousItem.get());
         }
         items.add(currentItem);
-        return currentItem;
+        return Optional.of(currentItem);
     }
 
-    private void addBaseItemForLastItem(final List<Item> items, final Item previousItem) {
-        if (previousItem != null && isPromotionalItem(previousItem) && isBaseItemMissing(items, previousItem)) {
-            items.add(createEmptyBaseItem(previousItem));
+    private void addBaseItemForLastItem(final List<Item> items, final Optional<Item> previousItem) {
+        if (previousItem.isPresent() && isPromotionalItem(previousItem.get()) && isBaseItemMissing(items,
+                previousItem.get())) {
+            items.add(createEmptyBaseItem(previousItem.get()));
         }
     }
 
     private boolean shouldAddBaseItem(final Item previousItem, final Item currentItem) {
-        return previousItem != null && !previousItem.getName().equals(currentItem.getName());
+        return !previousItem.getName().equals(currentItem.getName());
     }
 
     private void addBaseItemIfMissing(final List<Item> items, final Item item) {
@@ -107,4 +109,3 @@ public class ProductFileReader {
         return new BasicItem(promotionalItem.getName(), promotionalItem.getPrice(), EMPTY);
     }
 }
-
