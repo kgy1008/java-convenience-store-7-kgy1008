@@ -83,7 +83,7 @@ public class Cashier {
 
     public boolean isCartNotEmpty() {
         int totalCartSize = basicItems.size() + promotionItems.size();
-        return totalCartSize > 0;
+        return totalCartSize > EMPTY;
     }
 
     public Receipt generateReceipt(final boolean hasMembershipBenefit) {
