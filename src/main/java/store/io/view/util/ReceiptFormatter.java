@@ -3,6 +3,7 @@ package store.io.view.util;
 import store.domain.store.item.BasicItem;
 import store.domain.store.item.PromotionItem;
 import store.dto.FreeItem;
+import store.dto.PriceInformation;
 import store.dto.Receipt;
 
 public final class ReceiptFormatter {
@@ -29,7 +30,7 @@ public final class ReceiptFormatter {
         printHeader();
         printItemInformation(receipt);
         printGiftInformation(receipt);
-        printPriceInformation(receipt);
+        printPriceInformation(receipt.priceInformation());
     }
 
     private void printHeader() {
@@ -64,16 +65,17 @@ public final class ReceiptFormatter {
         }
     }
 
-    private void printPriceInformation(final Receipt receipt) {
+    private void printPriceInformation(final PriceInformation priceInformation) {
         System.out.println(DIVIDING_LINE);
-        System.out.printf(INFO_FORMAT, TOTAL_PRICE, receipt.totalCount(), receipt.totalPrice(), NEW_LINE);
+        System.out.printf(INFO_FORMAT, TOTAL_PRICE, priceInformation.totalCount(), priceInformation.totalPrice(),
+                NEW_LINE);
 
-        String formattedPromotionDiscountPrice = getFormattedString(receipt.promotionDiscountPrice());
+        String formattedPromotionDiscountPrice = getFormattedString(priceInformation.promotionDiscountPrice());
         System.out.printf(FORMAT, PROMOTION_DISCOUNT_PRICE, formattedPromotionDiscountPrice, NEW_LINE);
 
-        String formattedMembershipDiscountPrice = getFormattedString(receipt.membershipDiscountPrice());
+        String formattedMembershipDiscountPrice = getFormattedString(priceInformation.membershipDiscountPrice());
         System.out.printf(FORMAT, MEMBERSHIP_DISCOUNT_PRICE, formattedMembershipDiscountPrice, NEW_LINE);
-        System.out.printf(FORMAT, PAYMENT, String.format("%,d", receipt.payment()), NEW_LINE);
+        System.out.printf(FORMAT, PAYMENT, String.format("%,d", priceInformation.payment()), NEW_LINE);
     }
 
     private String getFormattedString(final int input) {

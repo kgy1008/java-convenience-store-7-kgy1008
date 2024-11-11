@@ -9,6 +9,7 @@ import store.domain.store.item.PromotionItem;
 import store.domain.user.ShoppingItem;
 import store.domain.user.ShoppingItems;
 import store.dto.FreeItem;
+import store.dto.PriceInformation;
 import store.dto.Receipt;
 
 public class Cashier {
@@ -80,6 +81,11 @@ public class Cashier {
 
     public Receipt generateReceipt(final boolean hasMembershipBenefit) {
         List<FreeItem> freeItems = findFreeItem(promotionItems);
+        PriceInformation priceInformation = calculatePayment(freeItems, hasMembershipBenefit);
+        return new Receipt(promotionItems, basicItems, freeItems, priceInformation);
+    }
+
+    private PriceInformation calculatePayment(final List<FreeItem> freeItems, final boolean hasMembershipBenefit) {
         Calculator calculator = new Calculator(freeItems);
 
         int totalPrice = calculator.calculateTotalPrice(basicItems, promotionItems);
@@ -88,8 +94,7 @@ public class Cashier {
         int payment = totalPrice - (promotionDiscountPrice + memberShipDiscountPrice);
         int totalCount = calculator.calculateTotalCount(basicItems, promotionItems);
 
-        return Receipt.from(promotionItems, basicItems, freeItems, totalPrice, promotionDiscountPrice,
-                memberShipDiscountPrice, payment, totalCount);
+        return new PriceInformation(totalPrice, promotionDiscountPrice, memberShipDiscountPrice, payment, totalCount);
     }
 
     private List<FreeItem> findFreeItem(final List<PromotionItem> promotionItems) {
