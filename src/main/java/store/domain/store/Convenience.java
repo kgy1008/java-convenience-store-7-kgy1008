@@ -15,12 +15,11 @@ public class Convenience {
     private static final int EXACT_MATCH = 0;
     private static final int GIVEN_FREE_ITEM = 1;
 
-    private final Initializer initializer;
     private final Promotions promotions;
     private final Items items;
 
     public Convenience() {
-        this.initializer = new Initializer();
+        final Initializer initializer = new Initializer();
         this.promotions = initializer.initPromotions();
         this.items = initializer.initItems();
     }
