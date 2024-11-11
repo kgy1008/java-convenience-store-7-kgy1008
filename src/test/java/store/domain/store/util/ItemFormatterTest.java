@@ -2,6 +2,9 @@ package store.domain.store.util;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static store.common.ErrorMessage.CONFLICT_EXCEPTION;
+import static store.common.ErrorMessage.EXCEED_QUANTITY;
+import static store.common.ErrorMessage.NOT_FOUND;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +31,8 @@ class ItemFormatterTest {
         String input = "[콜라-3],[콜라-2]";
 
         assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(CONFLICT_EXCEPTION.getMessage());
     }
 
     @ParameterizedTest
@@ -36,7 +40,8 @@ class ItemFormatterTest {
     @ValueSource(strings = {"[사이다-2]", "[새우-1]", "[콜라-3],[사이다-2]"})
     void validateNotExistProduct(final String input) {
         assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(NOT_FOUND.getMessage());
     }
 
     @ParameterizedTest
@@ -44,7 +49,8 @@ class ItemFormatterTest {
     @ValueSource(strings = {"[콜라-16]", "[새우깡-20]", "[새우깡-1],[콜라-16]"})
     void validateIsExceedQuantity(final String input) {
         assertThatThrownBy(() -> itemFormatter.convertStringToItem(input, items))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(EXCEED_QUANTITY.getMessage());
     }
 
     @ParameterizedTest
