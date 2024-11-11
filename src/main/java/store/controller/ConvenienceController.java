@@ -12,7 +12,6 @@ import store.domain.store.KioskStatus;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.user.Customer;
-import store.domain.user.ShoppingItems;
 import store.domain.user.UserResponse;
 import store.dto.ItemStatus;
 import store.dto.Receipt;
@@ -39,30 +38,17 @@ public class ConvenienceController {
     public void run() {
         KioskStatus kioskStatus = ON;
         while (kioskStatus == ON) {
-            reviewPromotionAndConfirmPurchaseToUser();
+            reviewPromotionAndConfirmPurchaseFromUser();
             executePayment();
             updateItem();
             kioskStatus = askForBuyMore();
         }
     }
 
-    private void reviewPromotionAndConfirmPurchaseToUser() {
+    private void reviewPromotionAndConfirmPurchaseFromUser() {
         retryTemplate(this::displayItems);
-        ShoppingItems items = pickItemsToBuy();
-        classifyItems(items);
+        pickItemsToBuy();
         checkPromotionPolicy();
-    }
-
-    private void executePayment() {
-        if (cashier.isCartNotEmpty()) {
-            boolean receiveMembershipBenefit = checkMemberShipBenefit();
-            Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
-            displayReceipt(receipt);
-        }
-    }
-
-    private void updateItem() {
-        cashier.finishPayment();
     }
 
     private void displayItems() {
@@ -72,15 +58,11 @@ public class ConvenienceController {
         outputView.printItems(itemStatus);
     }
 
-    private ShoppingItems pickItemsToBuy() {
-        return retryTemplate(() -> {
+    private void pickItemsToBuy() {
+        retryTemplate(() -> {
             String shoppingItems = inputView.inputShoppingItems();
-            return convenience.getShoppingItemsFromUser(shoppingItems);
+            cashier.getShoppingItemsFromUser(shoppingItems);
         });
-    }
-
-    private void classifyItems(final ShoppingItems shoppingItems) {
-        cashier.receiveAndClassifyItems(shoppingItems);
     }
 
     private void checkPromotionPolicy() {
@@ -121,6 +103,14 @@ public class ConvenienceController {
         }
     }
 
+    private void executePayment() {
+        if (cashier.isCartNotEmpty()) {
+            boolean receiveMembershipBenefit = checkMemberShipBenefit();
+            Receipt receipt = calculatePurchaseAmount(receiveMembershipBenefit);
+            displayReceipt(receipt);
+        }
+    }
+
     private boolean checkMemberShipBenefit() {
         return retryTemplate(() -> {
             UserResponse userResponse = inputView.askForGetMembershipBenefit();
@@ -144,6 +134,10 @@ public class ConvenienceController {
 
     private void displayReceipt(final Receipt receipt) {
         outputView.printReceipt(receipt);
+    }
+
+    private void updateItem() {
+        cashier.finishPayment();
     }
 
     private KioskStatus askForBuyMore() {

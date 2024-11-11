@@ -8,9 +8,7 @@ import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
 import store.domain.store.promotion.Promotion;
 import store.domain.store.promotion.Promotions;
-import store.domain.store.util.ItemFormatter;
 import store.domain.user.ShoppingItem;
-import store.domain.user.ShoppingItems;
 
 public class Convenience {
 
@@ -25,12 +23,6 @@ public class Convenience {
         this.initializer = new Initializer();
         this.promotions = initializer.initPromotions();
         this.items = initializer.initItems();
-    }
-
-    public ShoppingItems getShoppingItemsFromUser(final String input) {
-        ItemFormatter itemFormatter = new ItemFormatter();
-        List<ShoppingItem> shoppingItems = itemFormatter.convertStringToItem(input, items);
-        return new ShoppingItems(shoppingItems);
     }
 
     public int calculateItemCountWithoutPromotion(final PromotionItem promotionItem) {

@@ -6,8 +6,8 @@ import store.domain.store.item.BasicItem;
 import store.domain.store.item.Item;
 import store.domain.store.item.Items;
 import store.domain.store.item.PromotionItem;
+import store.domain.store.util.ItemFormatter;
 import store.domain.user.ShoppingItem;
-import store.domain.user.ShoppingItems;
 import store.dto.FreeItem;
 import store.dto.PriceInformation;
 import store.dto.Receipt;
@@ -27,9 +27,16 @@ public class Cashier {
         this.basicItems = new ArrayList<>();
     }
 
-    public void receiveAndClassifyItems(final ShoppingItems shoppingItems) {
+    public void getShoppingItemsFromUser(final String input) {
+        ItemFormatter itemFormatter = new ItemFormatter();
+        Items items = convenience.getItems();
+        List<ShoppingItem> shoppingItems = itemFormatter.convertStringToItem(input, items);
+        classifyItems(shoppingItems);
+    }
+
+    private void classifyItems(final List<ShoppingItem> shoppingItems) {
         final Items items = convenience.getItems();
-        for (ShoppingItem shoppingItem : shoppingItems.getItems()) {
+        for (ShoppingItem shoppingItem : shoppingItems) {
             String name = shoppingItem.getName();
             Item item = items.findItemByName(name);
             if (convenience.isPromotionApplicableToday(shoppingItem)) {
