@@ -44,7 +44,7 @@ class CashierTest {
 
     @Test
     @DisplayName("장바구니에 올바르게 추가되었는지 테스트")
-    void addPromotionItemFromCart() {
+    void increasePromotionItemCount() {
         // given
         cashier.getShoppingItemsFromUser("[콜라-2],[에너지바-5]");
         // when
@@ -57,7 +57,7 @@ class CashierTest {
 
     @Test
     @DisplayName("장바구니에서 들어온 개수만큼 올바르게 제거되었는지 테스트")
-    void removePromotionItemCountFromCart() {
+    void decreasePromotionItemCount() {
         // given
         cashier.getShoppingItemsFromUser("[콜라-11],[물-1]");
         // when
