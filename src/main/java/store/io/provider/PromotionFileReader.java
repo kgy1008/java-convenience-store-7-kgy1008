@@ -24,14 +24,17 @@ public class PromotionFileReader {
     public Promotions getPromotions() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(PROMOTION_FILE_PATH));
-            Set<Promotion> promotions = lines.stream()
-                    .skip(HEADER_LINE)
-                    .map(this::parsePromotion)
-                    .collect(Collectors.toUnmodifiableSet());
-            return new Promotions(promotions);
+            return new Promotions(readFileLines(lines));
         } catch (IOException e) {
             throw new FileReadException(CAN_NOT_READ.getMessage(), e);
         }
+    }
+
+    private Set<Promotion> readFileLines(final List<String> lines) {
+        return lines.stream()
+                .skip(HEADER_LINE)
+                .map(this::parsePromotion)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     private Promotion parsePromotion(String line) {
