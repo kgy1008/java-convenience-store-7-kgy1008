@@ -2,6 +2,7 @@ package store.domain.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static store.common.ErrorMessage.INVALID_INPUT;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +17,8 @@ class UserResponseTest {
     @ValueSource(strings = {"$", "sdf", "1"})
     void invalidInput(final String input) {
         assertThatThrownBy(() -> UserResponse.from(input))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(INVALID_INPUT.getMessage());
     }
 
     @ParameterizedTest
