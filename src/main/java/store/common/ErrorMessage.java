@@ -10,7 +10,8 @@ public enum ErrorMessage {
     EXCEED_QUANTITY("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요."),
     INVALID_INPUT("잘못된 입력입니다. 다시 입력해 주세요."),
     CONFLICT_EXCEPTION("같은 상품이 중복으로 입력되었습니다. 다시 입력해 주세요."),
-    UNAUTHORIZED_EXCEPTION("멤버십 회원이 아닙니다. 할인을 적용할 수 없습니다.");
+    UNAUTHORIZED_EXCEPTION("멤버십 회원이 아닙니다. 할인을 적용할 수 없습니다."),
+    INVALID_RANGE("상품의 최소 개수는 0개 입니다.");
 
     private static final String HEADER = "[ERROR] ";
     private final String message;

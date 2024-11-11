@@ -1,8 +1,13 @@
 package store.domain.store.item;
 
+import static store.common.ErrorMessage.INVALID_RANGE;
+
+import store.common.exception.AppException;
+
 public class BasicItem implements Item {
 
     private static final String NO_PROMOTION = "";
+    private static final int EMPTY_STOCK = 0;
 
     private final String name;
     private final int price;
@@ -13,13 +18,20 @@ public class BasicItem implements Item {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-
         this.promotionName = NO_PROMOTION;
+        validateQuantity();
+    }
+
+    private void validateQuantity() {
+        if (quantity < EMPTY_STOCK) {
+            throw new AppException(INVALID_RANGE.getMessage());
+        }
     }
 
     @Override
     public void decreaseQuantity(final int count) {
         quantity -= count;
+        validateQuantity();
     }
 
     @Override

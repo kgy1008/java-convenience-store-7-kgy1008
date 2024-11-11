@@ -79,12 +79,13 @@ public class ConvenienceController {
 
     private void handlePromotionStockShortage(final PromotionItem promotionItem) {
         int itemsWithoutPromotionCount = convenience.calculateItemCountWithoutPromotion(promotionItem);
-        UserResponse userResponse = retryTemplate(() ->
-                inputView.askForPurchaseWithWarning(promotionItem.getName(), itemsWithoutPromotionCount)
-        );
-        if (userResponse == UserResponse.NO) {
-            cashier.removePromotionItemFromCart(promotionItem, itemsWithoutPromotionCount);
-        }
+        retryTemplate(() -> {
+            UserResponse userResponse = inputView.askForPurchaseWithWarning(
+                    promotionItem.getName(), itemsWithoutPromotionCount);
+            if (userResponse == UserResponse.NO) {
+                cashier.removePromotionItemFromCart(promotionItem, itemsWithoutPromotionCount);
+            }
+        });
     }
 
     private void manageUserPromotionItemShortage() {
