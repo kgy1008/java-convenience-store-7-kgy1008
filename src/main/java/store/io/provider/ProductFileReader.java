@@ -1,7 +1,7 @@
 package store.io.provider;
 
 import static store.common.ErrorMessage.CAN_NOT_READ;
-import static store.common.ErrorMessage.INVALID_FORMAT;
+import static store.common.ErrorMessage.INVALID_FILE_DATA;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,7 +68,7 @@ public class ProductFileReader {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new FileReadException(INVALID_FORMAT.getMessage(), e);
+            throw new FileReadException(INVALID_FILE_DATA.getMessage(), e);
         }
     }
 
