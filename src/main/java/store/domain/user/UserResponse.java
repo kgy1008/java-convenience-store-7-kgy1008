@@ -1,6 +1,6 @@
 package store.domain.user;
 
-import static store.common.ErrorMessage.INVALID_FORMAT;
+import static store.common.ErrorMessage.INVALID_INPUT;
 
 import java.util.Arrays;
 import store.common.exception.AppException;
@@ -21,6 +21,6 @@ public enum UserResponse {
                 .filter(response -> response.description.equalsIgnoreCase(description))
                 .findFirst()
                 .orElseThrow(
-                        () -> new AppException(INVALID_FORMAT.getMessage()));
+                        () -> new AppException(INVALID_INPUT.getMessage()));
     }
 }
