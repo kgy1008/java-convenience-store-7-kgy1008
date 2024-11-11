@@ -37,7 +37,7 @@ public class Cashier {
     private void classifyItems(final List<ShoppingItem> shoppingItems) {
         final Items items = convenience.getItems();
         for (ShoppingItem shoppingItem : shoppingItems) {
-            String name = shoppingItem.getName();
+            String name = shoppingItem.name();
             Item item = items.findItemByName(name);
             if (convenience.isPromotionApplicableToday(shoppingItem)) {
                 extractPromotionItems(shoppingItem, item);
@@ -48,13 +48,13 @@ public class Cashier {
     }
 
     private void extractPromotionItems(final ShoppingItem shoppingItem, final Item item) {
-        PromotionItem promotionItem = new PromotionItem(item.getName(), item.getPrice(), shoppingItem.getQuantity(),
+        PromotionItem promotionItem = new PromotionItem(item.getName(), item.getPrice(), shoppingItem.quantity(),
                 item.getPromotionName());
         promotionItems.add(promotionItem);
     }
 
     private void extractBasicItems(final ShoppingItem shoppingItem, final Item item) {
-        BasicItem basicItem = new BasicItem(item.getName(), item.getPrice(), shoppingItem.getQuantity());
+        BasicItem basicItem = new BasicItem(item.getName(), item.getPrice(), shoppingItem.quantity());
         basicItems.add(basicItem);
     }
 
